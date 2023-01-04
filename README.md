@@ -1,5 +1,5 @@
 # projecttemplate
 
-Group Members:
+Group Members: Ben Snyder, 
 
-Project idea:
+Project idea: word game!
