@@ -1,4 +1,4 @@
-# projecttemplate
+# Cool Word Game (title TBD)
 
 Group Members: Ben Snyder, Daniel Cruz, Theo McGlashan, Susanne Goldstein
 
