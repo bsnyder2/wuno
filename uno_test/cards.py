@@ -58,18 +58,33 @@ class Card:
 
 class Deck:
     def __init__(self):
+        
         self.cards = []
 
-        # build deck
+        #build deck
         for letter in LETTER_VALUES_FREQS:
             for i in range(LETTER_VALUES_FREQS[letter][1]):
                 self.cards.append(Card(letter))
+        
+        self.deck_copy = self.cards.copy()
+       
 
     def draw(self):
+        if len(self.cards) == 0:
+            self.regen()
+            print('hi')
         return self.cards.pop(0)
 
     def shuffle(self):
         random.shuffle(self.cards)
 
     def regen(self):
-        pass
+        self.cards.extend(self.deck_copy)
+        self.shuffle()
+        print(self.cards)
+        #note: this basically gives you a brand-new shuffled deck,
+        #  meaning that if ppl have cards in their hands, 
+        # there will be more total cards than in a single deck
+        
+
+        
