@@ -44,7 +44,7 @@ class Card:
         self.VALUE = LETTER_VALUES_FREQS[std_letter][0]
 
     def __eq__(self, other):
-        return self.LETTER == other.letter
+        return self.LETTER == other.LETTER
 
     def __str__(self):
         return f"[{self.LETTER.upper()}]"
