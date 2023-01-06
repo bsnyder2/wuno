@@ -40,34 +40,26 @@ class Card:
         if std_letter not in LETTER_VALUES_FREQS:
             raise ValueError("Invalid letter assigned to card")
 
-        self.letter = std_letter
-        self.value = LETTER_VALUES_FREQS[std_letter][0]
+        self.LETTER = std_letter
+        self.VALUE = LETTER_VALUES_FREQS[std_letter][0]
 
     def __eq__(self, other):
-        return self.letter == other.letter
+        return self.LETTER == other.letter
 
     def __str__(self):
-        return f"[{self.letter.upper()}]"
-
-    def get_letter(self):
-        return self.letter
-
-    def get_value(self):
-        return self.value
+        return f"[{self.LETTER.upper()}]"
 
 
 class Deck:
     def __init__(self):
-        
         self.cards = []
 
-        #build deck
+        # build deck
         for letter in LETTER_VALUES_FREQS:
             for i in range(LETTER_VALUES_FREQS[letter][1]):
                 self.cards.append(Card(letter))
-        
+
         self.deck_copy = self.cards.copy()
-       
 
     def draw(self):
         if len(self.cards) == 0:
@@ -82,9 +74,6 @@ class Deck:
         self.cards.extend(self.deck_copy)
         self.shuffle()
         print(self.cards)
-        #note: this basically gives you a brand-new shuffled deck,
-        #  meaning that if ppl have cards in their hands, 
+        # note: this basically gives you a brand-new shuffled deck,
+        #  meaning that if ppl have cards in their hands,
         # there will be more total cards than in a single deck
-        
-
-        

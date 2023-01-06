@@ -1,5 +1,6 @@
 from cards import Card
 
+
 class Hand:
     def __init__(self):
         self.cards = []
@@ -23,7 +24,7 @@ class Hand:
 
         # adds card to hand and sorts alphabetically
         self.cards.append(card)
-        self.cards.sort(key=Card.get_letter)
+        self.cards.sort(key=lambda c : c.LETTER)
 
     def remove_card(self, card):
         self.cards.remove(card)
