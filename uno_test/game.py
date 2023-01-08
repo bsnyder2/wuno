@@ -1,5 +1,5 @@
 import random
-from cards import Deck
+from cards import Card, Deck
 from hand import Hand
 from word_trie import WordTrie
 
@@ -23,10 +23,6 @@ class Game:
         self.deck.shuffle()
         self.deal()
 
-
-
-
-
     def __str__(self):
         output = ""
 
@@ -39,7 +35,11 @@ class Game:
         output += f"Word valid? {self.current_word in self.VALID_WORDS}\n"
 
         # can a longer word be made?
-        output += f"Longer word possible? {self.tr.longer_possible(self.current_word)}\n\n"
+        output += f"Continuable? {len(self.tr.continuant_letters(self.current_word)) > 0}\n"
+
+        # can the current word be continued by the current player's hand?
+        # does current player's hand contain at least one of current node's children?
+        # output += f"Continuable by current? {len(self.tr.continuant_letters(self.current_word).intersection(self.current_hand.letters())) > 0}\n\n"
 
         for hand_index, hand in enumerate(self.hands):
             if hand_index == self.current_index:
@@ -50,13 +50,28 @@ class Game:
 
         return output
 
-    def place(self, card):
+    def draw(self):
+        self.current_hand.add_card(self.deck.draw())
+
+    def draw_until(self):
+        # put this in a variable bc will stay the same as cards are drawn
+        continuant_letters = self.tr.continuant_letters(self.current_word)
+
+        # if the current word can be continued by some letter
+        if len(continuant_letters) > 0:
+            # while the current hand has no cards to continue the word, draw
+            while len(continuant_letters.intersection(self.current_hand.letters())) < 1:
+                self.current_hand.add_card(self.deck.draw())
+
+    def place(self, card_letter):
+        card = Card(card_letter)
+
         if card not in self.current_hand:
             raise ValueError(f"Card {card} not in hand")
         self.current_hand.remove_card(card)
         self.current_word += card.LETTER
 
-    def next_turn(self):
+    def next_player(self):
         self.current_index += 1
         if self.current_index >= self.N_PLAYERS:
             self.current_index = 0
@@ -66,4 +81,4 @@ class Game:
     def deal(self):
         for i in range(self.N_PLAYERS * 3):
             self.current_hand.add_card(self.deck.draw())
-            self.next_turn()
+            self.next_player()

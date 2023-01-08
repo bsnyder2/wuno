@@ -73,7 +73,7 @@ class Deck:
     def regen(self):
         self.cards.extend(self.deck_copy)
         self.shuffle()
-        print(self.cards)
+        # print(self.cards)
         # note: this basically gives you a brand-new shuffled deck,
         #  meaning that if ppl have cards in their hands,
         # there will be more total cards than in a single deck

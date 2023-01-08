@@ -1,6 +1,6 @@
 class Node:
-    def __init__(self, data):
-        self.DATA = data
+    def __init__(self, letter):
+        self.LETTER = letter
         # associates letters and nodes
         self.children = {}
 
@@ -20,11 +20,11 @@ class WordTrie:
             # move down to next letter
             cur_node = cur_node.children[letter]
 
-    def longer_possible(self, word):
+    def continuant_letters(self, word):
         cur_node = self.ROOT
 
         for letter in word:
             if letter not in cur_node.children:
-                return False
+                return set()
             cur_node = cur_node.children[letter]
-        return len(cur_node.children) > 0
+        return set(cur_node.children.keys())

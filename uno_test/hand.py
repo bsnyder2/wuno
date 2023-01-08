@@ -18,6 +18,9 @@ class Hand:
 
         return output
 
+    def letters(self):
+        return set([card.LETTER for card in self.cards])
+
     def add_card(self, card):
         if not isinstance(card, Card):
             raise TypeError("Invalid object added to hand")
