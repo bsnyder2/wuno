@@ -16,7 +16,7 @@ class Server:
             self.socket.bind((self.server, self.portNum)) 
         except socket.error as e:
             str(e)
-            sys.exit
+            sys.exit(0)
 
         # Connects to four people
         self.socket.listen(4)
@@ -52,5 +52,6 @@ class Server:
 def main():
     server = Server()
     print(server.getConnection)
+    socket.close()
 
 main()
