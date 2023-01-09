@@ -14,12 +14,13 @@ class Server:
             # This links the socket to the address which is the server and the port number
             self.socket.bind((self.server, self.portNum)) 
         except socket.error as e:
-            str(e)
+            print(str(e))
 
         # Connects to four people
         self.socket.listen(4)
         print("Waiting for a connection...Starting Server")
 
+    # Threading lets us decrease the amount of tasks the system has to do
     def thread(self, connection):
         reply = ""
         while True:
