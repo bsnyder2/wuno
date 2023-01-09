@@ -6,6 +6,8 @@ from word_trie import WordTrie
 
 
 class Game:
+    
+
     def __init__(self, valid_words, n_players):
         # constants (word trie will not change after loaded)
         self.VALID_WORDS = valid_words
@@ -32,16 +34,20 @@ class Game:
     def __str__(self):
         output = ""
 
+
+
         if len(self.current_word) < 1:
             output += "Current word: [empty]\n"
         else:
             output += f"Current word: {self.current_word.upper()}\n"
 
         # is the current word valid?
+        
         output += f"Word valid? {self.current_word in self.VALID_WORDS}\n"
 
         # can a longer word be made?
-        output += f"Longer word possible? {self.tr.longer_possible(self.current_word)}\n\n"
+        #     output += f"Longer word possible? {self.tr.longer_possible(self.current_word)}\n\n"
+        #this is now revealed in the challenge function instead
 
         for hand_index, hand in enumerate(self.hands):
             if hand_index == self.current_index:
@@ -78,3 +84,11 @@ class Game:
                return
             self.current_hand.add_card(self.deck.draw())
             self.next_turn()
+    
+    def challenge(self):
+        doubt = input("Challenge this word? ")
+        doubt.lower()
+        if doubt == 'yes':
+            revealer = f"Longer word possible? {self.tr.longer_possible(self.current_word)}\n\n"
+            print(revealer)
+        return doubt

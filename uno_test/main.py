@@ -12,8 +12,14 @@ def main():
     
     while True:
         print(g)
-        g.place(Card(input("Enter card: ")))
-        g.next_turn()
+        #g.challenge()
+        if g.challenge() == 'yes':
+            g.next_turn()
+            print('next turn')
+        else:
+            g.place(Card(input("Enter card: ")))
+            g.next_turn()
+        
 
     print(g)
 
