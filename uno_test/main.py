@@ -1,5 +1,6 @@
 import sys
 from game import Game
+from text_input import TextInput
 
 
 def main():
@@ -11,12 +12,27 @@ def main():
     g = Game(valid_words, 4)
 
     while True:
-        g.draw_until()
         print(g)
-        g.place(input("Enter card: ").strip().lower())
+        if TextInput("Challenge?").get_bool():
+            if g.challenge():
+                print("Challenge successful")
+                g.prev_hand().add_from(g.discard)
+            else:
+                print("Challenge failed")
+                g.current_hand.add_from(g.discard)
+            g.current_word = ""
+            print(g)
+
+        while TextInput("Draw?").get_bool():
+            g.draw()
+            print(g)
+
+        g.place(TextInput("Place card").get_card())
+        print(g.discard)
         g.next_player()
 
-    print(g)
+    # if word valid, player who placed last card loses
+    # on challenge: if word continuable, last player takes all cards; if not, challenger takes all cards; center word is cleared; next turn
 
 
 if __name__ == "__main__":
@@ -33,7 +49,7 @@ if __name__ == "__main__":
 
 # important:
 # each turn, players can draw as long as they want until they find a letter that either continues the word, or a letter they think other players will believe continues the word
-# at any point, a player can challenge another if they believe a word can't be continued after the last card was put down
+# current player can challenge previous if they believe a word can't be continued after the last card was put down
 # if correct, last player takes all cards in middle; if incorrect, challenger takes all cards in middle
 
 
@@ -45,3 +61,6 @@ if __name__ == "__main__":
 
 # or ghost
 # you can put down a letter, other person can challenge that no word can be completed from given letters
+
+
+# cardset abstract class: hand, deck, discard pile extends this

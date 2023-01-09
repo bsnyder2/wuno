@@ -1,4 +1,5 @@
 import random
+from card_list import CardList
 
 # taken directly from scrabble - associates letters with values and frequencies
 LETTER_VALUES_FREQS = {
@@ -50,7 +51,7 @@ class Card:
         return f"[{self.LETTER.upper()}]"
 
 
-class Deck:
+class Deck(CardList):
     def __init__(self):
         self.cards = []
 

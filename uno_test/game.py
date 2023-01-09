@@ -1,5 +1,6 @@
 import random
-from cards import Card, Deck
+from cards import Deck
+from discard import Discard
 from hand import Hand
 from word_trie import WordTrie
 
@@ -14,6 +15,7 @@ class Game:
             self.tr.insert(word)
 
         self.deck = Deck()
+        self.discard = Discard()
         self.hands = [Hand() for i in range(n_players)]
 
         self.current_index = random.randrange(n_players)
@@ -39,7 +41,7 @@ class Game:
 
         # can the current word be continued by the current player's hand?
         # does current player's hand contain at least one of current node's children?
-        # output += f"Continuable by current? {len(self.tr.continuant_letters(self.current_word).intersection(self.current_hand.letters())) > 0}\n\n"
+        output += f"Continuable by current? {len(self.tr.continuant_letters(self.current_word).intersection(self.current_hand.letters())) > 0}\n\n"
 
         for hand_index, hand in enumerate(self.hands):
             if hand_index == self.current_index:
@@ -50,25 +52,34 @@ class Game:
 
         return output
 
+    def prev_hand(self):
+        self.prev_index = self.current_index - 1
+        if self.prev_index < 0:
+            self.prev_index = self.N_PLAYERS
+        return self.hands[self.prev_index]
+
+    def challenge(self):
+        # current word continuable?
+        return not len(self.tr.continuant_letters(self.current_word)) > 0
+
     def draw(self):
         self.current_hand.add_card(self.deck.draw())
 
-    def draw_until(self):
-        # put this in a variable bc will stay the same as cards are drawn
-        continuant_letters = self.tr.continuant_letters(self.current_word)
+    # def draw_until(self):
+    #     # put this in a variable bc will stay the same as cards are drawn
+    #     continuant_letters = self.tr.continuant_letters(self.current_word)
 
-        # if the current word can be continued by some letter
-        if len(continuant_letters) > 0:
-            # while the current hand has no cards to continue the word, draw
-            while len(continuant_letters.intersection(self.current_hand.letters())) < 1:
-                self.current_hand.add_card(self.deck.draw())
+    #     # if the current word can be continued by some letter
+    #     if len(continuant_letters) > 0:
+    #         # while the current hand has no cards to continue the word, draw
+    #         while len(continuant_letters.intersection(self.current_hand.letters())) < 1:
+    #             self.current_hand.add_card(self.deck.draw())
 
-    def place(self, card_letter):
-        card = Card(card_letter)
-
+    def place(self, card):
         if card not in self.current_hand:
             raise ValueError(f"Card {card} not in hand")
         self.current_hand.remove_card(card)
+        self.discard.add_card(card)
         self.current_word += card.LETTER
 
     def next_player(self):
