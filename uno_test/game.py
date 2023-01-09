@@ -1,5 +1,6 @@
 import random
 from cards import Deck
+from cards import Card
 from hand import Hand
 from word_trie import WordTrie
 
@@ -19,6 +20,7 @@ class Game:
         self.current_index = random.randrange(n_players)
         self.current_hand = self.hands[self.current_index]
         self.current_word = ""
+        #self.current_pile = ''
 
         self.deck.shuffle()
         self.deal()
@@ -55,6 +57,12 @@ class Game:
             raise ValueError(f"Card {card} not in hand")
         self.current_hand.remove_card(card)
         self.current_word += card.LETTER
+        self.deck.current_pile.append(Card(card.LETTER))
+        #self.current_hand.add_card(self.deck.draw())
+        ## just added to check if regen works
+
+        
+
 
     def next_turn(self):
         self.current_index += 1
@@ -64,6 +72,9 @@ class Game:
         self.current_hand = self.hands[self.current_index]
 
     def deal(self):
-        for i in range(self.N_PLAYERS * 3):
+        for i in range(self.N_PLAYERS * 7):
+            if len(self.deck.cards) == 0:
+               print("Error: You have added too many players for this deck.") 
+               return
             self.current_hand.add_card(self.deck.draw())
             self.next_turn()

@@ -1,4 +1,5 @@
 import random
+#from game import Game
 
 # taken directly from scrabble - associates letters with values and frequencies
 LETTER_VALUES_FREQS = {
@@ -53,13 +54,15 @@ class Card:
 class Deck:
     def __init__(self):
         self.cards = []
+        #self.cards = [Card('A'),Card('B'),Card('C'),Card('D'),Card('E'),Card('F'),Card('G'), Card('H') ]
+        self.current_pile = []
 
         # build deck
         for letter in LETTER_VALUES_FREQS:
             for i in range(LETTER_VALUES_FREQS[letter][1]):
                 self.cards.append(Card(letter))
 
-        self.deck_copy = self.cards.copy()
+        #self.deck_copy = self.cards.copy()
 
     def draw(self):
         if len(self.cards) == 0:
@@ -70,10 +73,13 @@ class Deck:
     def shuffle(self):
         random.shuffle(self.cards)
 
+    # def pile_on(self, input):
+    #     self.current_pile.extend(input)
+    #     print(self.current_pile)
+
+
     def regen(self):
-        self.cards.extend(self.deck_copy)
+        self.cards.extend(self.current_pile)
         self.shuffle()
         print(self.cards)
-        # note: this basically gives you a brand-new shuffled deck,
-        #  meaning that if ppl have cards in their hands,
-        # there will be more total cards than in a single deck
+       
