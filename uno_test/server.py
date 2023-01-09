@@ -5,7 +5,8 @@ class Server:
 
     def __init__(self):
         # This is our local server (only people that are connected to ObieWiFi)
-        self.server = "10.17.3.65"
+        # self.server = "10.17.3.65"
+        self.server = "" # Temporary fix
         # This allows us to send and receive data
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.portNum = 5555
