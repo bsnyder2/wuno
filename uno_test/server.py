@@ -12,9 +12,11 @@ class Server:
         self.portNum = 5555
 
         try:
-            self.socket.bind((self.server, self.portNum))
+            # This links the socket to the address which is the server and the port number
+            self.socket.bind((self.server, self.portNum)) 
         except socket.error as e:
             str(e)
+            sys.exit
 
         # Connects to four people
         self.socket.listen(4)
@@ -24,8 +26,8 @@ class Server:
         reply = ""
         while True:
             try:
-                data = connection.recv(2048) # Receiving data
-                reply = data.decode("utf-8")
+                data = connection.recv(2048) # Receives data in the form of bytes
+                reply = data.decode("utf-8") # Here we turn the data into a string format
 
                 if not data:
                     print("Server Disconnected")
@@ -34,7 +36,7 @@ class Server:
                     print("Received: ", reply)
                     print("Sending: ", reply)
 
-                connection.sendall(str.encode(reply))
+                connection.sendall(str.encode(reply)) # This sends the data to the socket
 
             except:
                 break
@@ -42,7 +44,7 @@ class Server:
     # This method lets us search for a connection
     def getConnection(self):
         while True:
-            connection, address = self.socket.accept()
+            connection, address = self.socket.accept() # Here we accept a connection
             print("Connecting to: ", address)
             srvr = Server()
             start_new_thread(srvr.thread(connection))
