@@ -1,6 +1,5 @@
 import socket
 from _thread import *
-import sys
 
 class Server:
 
@@ -16,7 +15,6 @@ class Server:
             self.socket.bind((self.server, self.portNum)) 
         except socket.error as e:
             str(e)
-            sys.exit(0)
 
         # Connects to four people
         self.socket.listen(4)
@@ -46,12 +44,15 @@ class Server:
         while True:
             connection, address = self.socket.accept() # Here we accept a connection
             print("Connecting to: ", address)
-            srvr = Server()
-            start_new_thread(srvr.thread(connection))
+            start_new_thread(self.thread(connection))
+
+    def endConnection(self):
+        self.socket.shutdown(socket.SHUT_RDWR)
+        self.socket.close
 
 def main():
     server = Server()
     print(server.getConnection)
-    socket.close()
+    server.endConnection
 
 main()
