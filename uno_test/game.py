@@ -82,13 +82,32 @@ class Game:
             if len(self.deck.cards) == 0:
                print("Error: You have added too many players for this deck.") 
                return
-            self.current_hand.add_card(self.deck.draw())
+            self.current_hand.add_card(self.deck.draw(self.deck.cards))
             self.next_turn()
     
     def challenge(self):
         doubt = input("Challenge this word? ")
         doubt.lower()
         if doubt == 'yes':
-            revealer = f"Longer word possible? {self.tr.longer_possible(self.current_word)}\n\n"
-            print(revealer)
+            #revealer = f"Longer word possible? {self.tr.longer_possible(self.current_word)}\n\n"
+            print(f"Longer word possible? {self.tr.longer_possible(self.current_word)}\n\n")
+            revealer = self.tr.longer_possible(self.current_word)
+            if revealer == True:
+                print("You have lost this challenge. Draw the current WIP")  ## Word in Progress?? Make shorter obv
+                for card_index in range(len(self.deck.current_pile)):
+                    self.current_hand.add_card(self.deck.draw(self.deck.current_pile))
+            if revealer == False:
+                print("You have won this challenge. Opponent draws current WIP")
+                self.current_index -= 1
+                for card_index in range(len(self.deck.current_pile)):
+                    self.current_hand.add_card(self.deck.draw(self.deck.current_pile))
+                self.current_index += 1
+            self.current_word = ''
+
+            
+
+
+            #return self.cards.pop(0)
+            #self.current_pile = []
+
         return doubt

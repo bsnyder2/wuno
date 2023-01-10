@@ -1,6 +1,7 @@
 import sys
 from cards import Card
 from game import Game
+import time
 
 def main():
     # creates a set of valid words from given file
@@ -14,6 +15,7 @@ def main():
         print(g)
         #g.challenge()
         if g.challenge() == 'yes':
+            time.sleep(1.5)
             g.next_turn()
             print('next turn')
         else:

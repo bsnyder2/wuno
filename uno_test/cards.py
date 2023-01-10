@@ -64,18 +64,15 @@ class Deck:
 
         #self.deck_copy = self.cards.copy()
 
-    def draw(self):
+    def draw(self, stack_type):
         if len(self.cards) == 0:
             self.regen()
-            print('hi')
-        return self.cards.pop(0)
+            #print('hi')
+        return stack_type.pop(0)
+        #return self.cards.pop(0)
 
     def shuffle(self):
         random.shuffle(self.cards)
-
-    # def pile_on(self, input):
-    #     self.current_pile.extend(input)
-    #     print(self.current_pile)
 
 
     def regen(self):
