@@ -4,9 +4,8 @@ from _thread import *
 class Server:
 
     def __init__(self):
-        # This is our local server (only people that are connected to ObieWiFi)
-        # self.server = "10.17.3.65"
-        self.server = "" # Temporary fix
+        # This is our local server
+        self.server = "127.0.0.1"
         # This allows us to send and receive data
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.portNum = 5555
@@ -14,15 +13,15 @@ class Server:
         try:
             # This links the socket to the address which is the server and the port number
             self.socket.bind((self.server, self.portNum)) 
+            # Connects to four people
+            self.socket.listen(4)
+            print("Waiting for a connection...Starting Server")
         except socket.error as e:
             print(str(e))
 
-        # Connects to four people
-        self.socket.listen(4)
-        print("Waiting for a connection...Starting Server")
-
     # Threading lets us decrease the amount of tasks the system has to do
     def thread(self, connection):
+        connection.send(str.encode("Connected"))
         reply = ""
         while True:
             try:
@@ -41,6 +40,9 @@ class Server:
             except:
                 break
 
+        print("Lost Connection")
+        connection.close()
+
     # This method lets us search for a connection
     def getConnection(self):
         while True:
@@ -54,7 +56,7 @@ class Server:
 
 def main():
     server = Server()
-    print(server.getConnection)
+    server.getConnection
     server.endConnection
 
 main()
