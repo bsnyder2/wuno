@@ -5,7 +5,7 @@ from text_input import TextInput
 
 def main():
     # creates a set of valid words from given file
-    file = open(sys.path[0] + "/../wordsets/words-58k.txt", "r")
+    file = open(sys.path[0] + "/../wordsets/words-370k.txt", "r")
     valid_words = {line.strip() for line in file}
 
     # creates game with wordset valid_words and 4 players
@@ -28,7 +28,11 @@ def main():
             print(g)
 
         g.place(TextInput("Place card").get_card())
-        print(g.discard)
+
+        if len(g.current_hand) < 1:
+            print(f"Player {g.current_index} wins")
+            sys.exit(0)
+
         g.next_player()
 
     # if word valid, player who placed last card loses
@@ -50,6 +54,7 @@ if __name__ == "__main__":
 # important:
 # each turn, players can draw as long as they want until they find a letter that either continues the word, or a letter they think other players will believe continues the word
 # current player can challenge previous if they believe a word can't be continued after the last card was put down
+# can also claim that previous word is a word - if no one notices, play continues
 # if correct, last player takes all cards in middle; if incorrect, challenger takes all cards in middle
 
 

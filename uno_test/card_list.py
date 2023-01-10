@@ -5,6 +5,9 @@ class CardList:
     def __contains__(self, card):
         return card in self.cards
 
+    def __len__(self):
+        return len(self.cards)
+
     def __str__(self):
         output = ""
 
@@ -12,6 +15,16 @@ class CardList:
             return "[empty]"
         for card in self.cards:
             output += str(card) + " "
+
+        return output
+
+    def hidden(self):
+        output = ""
+
+        if len(self.cards) < 1:
+            return "[empty]"
+        for card in self.cards:
+            output += "[ ] "
 
         return output
 

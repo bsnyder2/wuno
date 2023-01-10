@@ -34,31 +34,32 @@ class Game:
             output += f"Current word: {self.current_word.upper()}\n"
 
         # is the current word valid?
-        output += f"Word valid? {self.current_word in self.VALID_WORDS}\n"
+        # output += f"Word valid? {self.current_word in self.VALID_WORDS}\n"
 
         # can a longer word be made?
-        output += f"Continuable? {len(self.tr.continuant_letters(self.current_word)) > 0}\n"
+        # output += f"Continuable? {len(self.tr.continuant_letters(self.current_word)) > 0}\n"
 
         # can the current word be continued by the current player's hand?
         # does current player's hand contain at least one of current node's children?
-        output += f"Continuable by current? {len(self.tr.continuant_letters(self.current_word).intersection(self.current_hand.letters())) > 0}\n\n"
+        # output += f"Continuable by current? {len(self.tr.continuant_letters(self.current_word).intersection(self.current_hand.letters())) > 0}\n\n"
 
         for hand_index, hand in enumerate(self.hands):
             if hand_index == self.current_index:
-                output += "> "
+                output += f"> Player {hand_index}: {hand}\n"
             else:
-                output += "  "
-            output += f"Player {hand_index}: {hand}\n"
+                output += f"  Player {hand_index}: {hand.hidden()}\n"
 
         return output
 
     def prev_hand(self):
         self.prev_index = self.current_index - 1
         if self.prev_index < 0:
-            self.prev_index = self.N_PLAYERS
+            self.prev_index = self.N_PLAYERS - 1
         return self.hands[self.prev_index]
 
     def challenge(self):
+        if len(self.current_word) > 2 and self.current_word in self.VALID_WORDS:
+            return True
         # current word continuable?
         return not len(self.tr.continuant_letters(self.current_word)) > 0
 

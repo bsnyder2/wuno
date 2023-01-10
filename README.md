@@ -8,8 +8,8 @@ Current idea: An Uno-like word game using words instead of numbers, also taking 
 
 Schedule:
   1/13:
-    Have sme sort of game that runs, only on one computer not yet multiplayer. Simple display stuff with pygame, not final look of the game.
+    Have some sort of game that runs, only on one computer not yet multiplayer. Simple display stuff with pygame, not final look of the game.
   1/20:
-    Make it look prettier, change the game as needed so it's actually fun. Attempt to put it on a server so we can play against eachother.
+    Make it look prettier, change the game as needed so it's actually fun. Attempt to put it on a server so we can play against each other.
   1/25
     Finish making it multiplayer, fix bugs.
