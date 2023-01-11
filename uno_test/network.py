@@ -6,7 +6,6 @@ class Network:
         self.host = "localhost"
         self.portNum = 9889
         self.address = (self.host, self.portNum)
-
         self.id = self.connect()
         print(self.id)
 
@@ -22,6 +21,5 @@ class Network:
 
 def main():
     network = Network()
-    network.connect
 
 main()
