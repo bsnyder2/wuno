@@ -4,11 +4,10 @@ from _thread import *
 class Server:
 
     def __init__(self):
-        # This is our local server
-        self.host = "132.162.25.81"
+        self.host = "localhost"
         # This allows us to send and receive data
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.portNum = 5555
+        self.portNum = 9889
 
         try:
             # This links the socket to the address which is the server and the port number
