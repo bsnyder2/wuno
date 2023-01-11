@@ -5,16 +5,16 @@ class Server:
 
     def __init__(self):
         # This is our local server
-        self.server = "127.0.0.1"
+        self.host = "132.162.25.81"
         # This allows us to send and receive data
-        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.portNum = 5555
 
         try:
             # This links the socket to the address which is the server and the port number
-            self.socket.bind((self.server, self.portNum)) 
+            self.client.bind((self.host, self.portNum)) 
             # Connects to four people
-            self.socket.listen(4)
+            self.client.listen(4)
             print("Waiting for a connection...Starting Server")
         except socket.error as e:
             print(str(e))
@@ -46,13 +46,13 @@ class Server:
     # This method lets us search for a connection
     def getConnection(self):
         while True:
-            connection, address = self.socket.accept() # Here we accept a connection
+            connection, address = self.client.accept() # Here we accept a connection
             print("Connecting to: ", address)
             start_new_thread(self.thread(connection))
 
     def endConnection(self):
-        self.socket.shutdown(socket.SHUT_RDWR)
-        self.socket.close
+        self.client.shutdown(socket.SHUT_RDWR)
+        self.client.close
 
 def main():
     server = Server()
