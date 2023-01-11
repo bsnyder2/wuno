@@ -40,3 +40,5 @@ class CardList:
         self.cards.extend(list.cards)
         list.cards = []
         self.cards.sort(key=lambda c: c.LETTER)
+
+  

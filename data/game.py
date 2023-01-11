@@ -98,3 +98,7 @@ class Game:
         for i in range(self.N_PLAYERS * 3):
             self.current_hand.add_card(self.deck.draw())
             self.next_player()
+
+    def draw_2(self):
+         for i in range(2):
+            self.current_hand.add_card(self.deck.draw())
