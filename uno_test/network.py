@@ -7,13 +7,13 @@ class Network:
         self.portNum = 9889
         self.address = (self.host, self.portNum)
         self.id = self.connect()
-        print(self.id)
+        print(str(self.id))
 
     def connect(self):
         try:
             # Here we attempt to connect
-            self.client.settimeout(5.0) # will wait 5 seconds for a connection; if not found, disconnects
-            self.client.connect(self.address)
+            self.client.settimeout(30.0) # will wait 30 seconds for a connection; if not found, disconnects
+            self.client.connect_ex(self.address)
             return self.client.recv(2048).decode
         except socket.error as e:
             print(str(e))
