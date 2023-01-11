@@ -1,5 +1,6 @@
 import socket
 from _thread import *
+import datetime
 
 class Server:
 
@@ -20,7 +21,10 @@ class Server:
 
     # Threading lets us decrease the amount of tasks the system has to do
     def thread(self, connection):
+        currentServerTime = "%s"%datetime.now()
         connection.send(str.encode("Connected"))
+        connection.send(currentServerTime.encode())
+
         reply = ""
         while True:
             try:
