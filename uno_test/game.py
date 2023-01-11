@@ -1,5 +1,5 @@
 import random
-from cards import Deck
+from cards import Card, Deck
 from discard import Discard
 from hand import Hand
 from word_trie import WordTrie
@@ -34,14 +34,10 @@ class Game:
             output += f"Current word: {self.current_word.upper()}\n"
 
         # is the current word valid?
-        # output += f"Word valid? {self.current_word in self.VALID_WORDS}\n"
+        output += f"Word valid? {self.current_word in self.VALID_WORDS}\n"
 
         # can a longer word be made?
-        # output += f"Continuable? {len(self.tr.continuant_letters(self.current_word)) > 0}\n"
-
-        # can the current word be continued by the current player's hand?
-        # does current player's hand contain at least one of current node's children?
-        # output += f"Continuable by current? {len(self.tr.continuant_letters(self.current_word).intersection(self.current_hand.letters())) > 0}\n\n"
+        output += f"Longer word possible? {self.tr.longer_possible(self.current_word)}\n\n"
 
         for hand_index, hand in enumerate(self.hands):
             if hand_index == self.current_index:
@@ -82,6 +78,9 @@ class Game:
         self.current_hand.remove_card(card)
         self.discard.add_card(card)
         self.current_word += card.LETTER
+        self.deck.current_pile.append(Card(card.LETTER))
+        # self.current_hand.add_card(self.deck.draw())
+        # just added to check if regen works
 
     def next_player(self):
         self.current_index += 1

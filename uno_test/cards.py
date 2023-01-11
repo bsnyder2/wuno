@@ -54,25 +54,28 @@ class Card:
 class Deck(CardList):
     def __init__(self):
         self.cards = []
+        self.current_pile = []
 
         # build deck
         for letter in LETTER_VALUES_FREQS:
             for i in range(LETTER_VALUES_FREQS[letter][1]):
                 self.cards.append(Card(letter))
 
-        self.deck_copy = self.cards.copy()
+        #self.deck_copy = self.cards.copy()
 
-    def draw(self):
+    def draw(self, stack_type):
         if len(self.cards) == 0:
             self.regen()
-            print('hi')
-        return self.cards.pop(0)
+            #print('hi')
+        return stack_type.pop(0)
+        #return self.cards.pop(0)
 
     def shuffle(self):
         random.shuffle(self.cards)
 
+
     def regen(self):
-        self.cards.extend(self.deck_copy)
+        self.cards.extend(self.current_pile)
         self.shuffle()
         # print(self.cards)
         # note: this basically gives you a brand-new shuffled deck,
