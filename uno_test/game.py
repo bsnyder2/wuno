@@ -1,6 +1,6 @@
 import random
 from cards import Card, Deck
-from discard import Discard
+from played_lists import Discard, WordList
 from hand import Hand
 from word_trie import WordTrie
 
@@ -15,6 +15,7 @@ class Game:
             self.tr.insert(word)
 
         self.deck = Deck()
+        self.word_list = WordList()
         self.discard = Discard()
         self.hands = [Hand() for i in range(n_players)]
 
@@ -34,10 +35,10 @@ class Game:
             output += f"Current word: {self.current_word.upper()}\n"
 
         # is the current word valid?
-        output += f"Word valid? {self.current_word in self.VALID_WORDS}\n"
+        # output += f"Word valid? {self.current_word in self.VALID_WORDS}\n"
 
         # can a longer word be made?
-        output += f"Longer word possible? {len(self.tr.continuant_letters(self.current_word)) > 0}\n\n"
+        # output += f"Longer word possible? {len(self.tr.continuant_letters(self.current_word)) > 0}\n\n"
 
         for hand_index, hand in enumerate(self.hands):
             if hand_index == self.current_index:
@@ -53,11 +54,16 @@ class Game:
             self.prev_index = self.N_PLAYERS - 1
         return self.hands[self.prev_index]
 
-    def challenge(self):
-        if len(self.current_word) > 2 and self.current_word in self.VALID_WORDS:
-            return True
+    def challenge_valid(self):
         # current word continuable?
         return not len(self.tr.continuant_letters(self.current_word)) > 0
+   
+    def is_complete(self):
+        # current word complete?
+        return len(self.current_word) > 2 and self.current_word in self.VALID_WORDS
+            
+            
+
 
     def draw(self):
         self.current_hand.add_card(self.deck.draw())
@@ -76,11 +82,10 @@ class Game:
         if card not in self.current_hand:
             raise ValueError(f"Card {card} not in hand")
         self.current_hand.remove_card(card)
-        self.discard.add_card(card)
+        self.word_list.add_card(card)
         self.current_word += card.LETTER
         self.deck.current_pile.append(Card(card.LETTER))
-        # self.current_hand.add_card(self.deck.draw())
-        # just added to check if regen works
+    
 
     def next_player(self):
         self.current_index += 1

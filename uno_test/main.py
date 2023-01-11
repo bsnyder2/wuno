@@ -13,25 +13,44 @@ def main():
 
     while True:
         print(g)
-        if TextInput("Challenge?").get_bool():
-            if g.challenge():
+        if TextInput("Challenge Complete?").get_bool():
+            if g.is_complete():
                 print("Challenge successful")
-                g.prev_hand().add_from(g.discard)
+                g.prev_hand().add_card(g.deck.draw())
+                g.discard.add_from(g.word_list)
+                g.current_word = ''
             else:
                 print("Challenge failed")
-                g.current_hand.add_from(g.discard)
-            g.current_word = ""
-            print(g)
+                g.current_hand.add_card(g.deck.draw())
+            g.next_player()
+            continue
+        
 
+        if TextInput("Challenge Valid?").get_bool():
+            if g.challenge_valid():
+                print("Challenge successful")
+                g.prev_hand().add_from(g.word_list)
+                g.discard.add_from(g.word_list)
+                g.current_word = ''
+            else:
+                print("Challenge failed")
+                g.current_hand.add_from(g.word_list)
+            g.next_player()
+            continue
+            
         while TextInput("Draw?").get_bool():
             g.draw()
             print(g)
 
         g.place(TextInput("Place card").get_card())
 
-        if len(g.current_hand) < 1:
-            print(f"Player {g.current_index} wins")
-            sys.exit(0)
+        if TextInput("Claim complete?").get_bool():
+            if g.is_complete():
+                g.discard.add_from(g.word_list)
+                g.current_word = ''
+            else:
+                for i in range(2):
+                    g.current_hand.add_card(g.deck.draw())
 
         g.next_player()
 
@@ -69,3 +88,5 @@ if __name__ == "__main__":
 
 
 # cardset abstract class: hand, deck, discard pile extends this
+
+# ending the turn after challenge makes it so that players can challenge strategically to get out of playing a card
