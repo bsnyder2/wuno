@@ -9,7 +9,7 @@ def main():
     valid_words = {line.strip() for line in file}
 
     # creates game with wordset valid_words and 4 players
-    g = Game(valid_words, 4)
+    g = Game(valid_words, 2)
 
     while True:
         print(g)

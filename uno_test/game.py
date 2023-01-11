@@ -37,7 +37,7 @@ class Game:
         output += f"Word valid? {self.current_word in self.VALID_WORDS}\n"
 
         # can a longer word be made?
-        output += f"Longer word possible? {self.tr.longer_possible(self.current_word)}\n\n"
+        output += f"Longer word possible? {len(self.tr.continuant_letters(self.current_word)) > 0}\n\n"
 
         for hand_index, hand in enumerate(self.hands):
             if hand_index == self.current_index:

@@ -63,12 +63,10 @@ class Deck(CardList):
 
         #self.deck_copy = self.cards.copy()
 
-    def draw(self, stack_type):
+    def draw(self):
         if len(self.cards) == 0:
             self.regen()
-            #print('hi')
-        return stack_type.pop(0)
-        #return self.cards.pop(0)
+        return self.cards.pop(0)
 
     def shuffle(self):
         random.shuffle(self.cards)
