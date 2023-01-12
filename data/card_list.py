@@ -35,3 +35,10 @@ class CardList:
         # adds card to hand and sorts alphabetically
         self.cards.append(card)
         self.cards.sort(key=lambda c: c.LETTER)
+
+    def add_from(self, list):
+        self.cards.extend(list.cards)
+        list.cards = []
+        self.cards.sort(key=lambda c: c.LETTER)
+
+  
