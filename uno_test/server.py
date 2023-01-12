@@ -19,7 +19,7 @@ class Server:
         except socket.error as e:
             print(str(e))
 
-    # Threading lets us decrease the amount of tasks the system has to do
+    # Threading lets us handle all the connections so we don't need to call getConnection several times
     def thread(self, connection):
         currentServerTime = "%s"%datetime.now()
         connection.send(str.encode("Connected"))
@@ -35,10 +35,10 @@ class Server:
                     print("Server Disconnected")
                     break
                 else:
-                    print("Received: ", reply)
-                    print("Sending: ", reply)
+                    print(f"Received:  {reply}")
+                    print(f"Sending: {reply}")
 
-                connection.sendall(str.encode(reply)) # This sends the data to the socket
+                connection.sendall(str.encode(reply)) # This sends the data to the client
 
             except:
                 break
@@ -50,8 +50,8 @@ class Server:
     def getConnection(self):
         while True:
             connection, address = self.client.accept() # Here we accept a connection
-            print("Connecting to: ", address)
-            start_new_thread(self.thread(connection))
+            print(f"Connecting to: {address}")
+            start_new_thread(self.thread, (connection,))
 
     def endConnection(self):
         self.client.shutdown(socket.SHUT_RDWR)
