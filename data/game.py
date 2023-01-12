@@ -1,7 +1,5 @@
 import random
-from cards import Card, Deck
-from played_lists import Discard, WordList
-from hand import Hand
+from cards import Card, CardList, Deck, Hand
 from word_trie import WordTrie
 
 
@@ -15,8 +13,8 @@ class Game:
             self.tr.insert(word)
 
         self.deck = Deck()
-        self.word_list = WordList()
-        self.discard = Discard()
+        self.word_list = CardList()
+        self.discard = CardList()
         self.hands = [Hand() for i in range(n_players)]
 
         self.current_index = random.randrange(n_players)
@@ -57,26 +55,13 @@ class Game:
     def challenge_valid(self):
         # current word continuable?
         return not len(self.tr.continuant_letters(self.current_word)) > 0
-   
+
     def is_complete(self):
         # current word complete?
         return len(self.current_word) > 2 and self.current_word in self.VALID_WORDS
-            
-            
-
 
     def draw(self):
         self.current_hand.add_card(self.deck.draw())
-
-    # def draw_until(self):
-    #     # put this in a variable bc will stay the same as cards are drawn
-    #     continuant_letters = self.tr.continuant_letters(self.current_word)
-
-    #     # if the current word can be continued by some letter
-    #     if len(continuant_letters) > 0:
-    #         # while the current hand has no cards to continue the word, draw
-    #         while len(continuant_letters.intersection(self.current_hand.letters())) < 1:
-    #             self.current_hand.add_card(self.deck.draw())
 
     def place(self, card):
         if card not in self.current_hand:
@@ -85,7 +70,6 @@ class Game:
         self.word_list.add_card(card)
         self.current_word += card.LETTER
         self.deck.current_pile.append(Card(card.LETTER))
-    
 
     def next_player(self):
         self.current_index += 1
@@ -100,5 +84,5 @@ class Game:
             self.next_player()
 
     def draw_2(self):
-         for i in range(2):
+        for i in range(2):
             self.current_hand.add_card(self.deck.draw())
