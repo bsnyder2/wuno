@@ -2,20 +2,21 @@ import socket
 from _thread import *
 
 HOST = "localhost"
-PORT = 9999
+PORT = 9119
 
-client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 # This lets us reuse the same address without having to wait
-client.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) 
+sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) 
 
 try: 
-    client.bind((HOST, PORT))
-    client.listen(4)
+    sock.bind((HOST, PORT))
+    sock.listen(4)
     print("Waiting for connection...connected")
 except socket.error as e:
     print(e)
 
 def thread(connection):
+    connection.send(str.encode("Connection successful"))
     msg = ""
     while True:
         try:
@@ -26,15 +27,13 @@ def thread(connection):
                 break
             else:
                 print(f"Received: {msg}")
-                print(f"Sending: {msg}")
         except:
             break
     print("Connection Lost")
     connection.shutdown(socket.SHUT_RDWR)
     connection.close()
         
-
 while True:
-    conn, addr = client.accept()
+    conn, addr = sock.accept()
     print(f"Connecting to: {addr}")
     start_new_thread(thread, (conn,))
