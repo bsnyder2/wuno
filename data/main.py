@@ -16,13 +16,11 @@ def main():
         if TextInput("Challenge Complete?").get_bool():
             if g.is_complete():
                 print("Challenge successful")
-                #g.prev_hand().add_card(g.deck.draw())
                 g.prev_hand().draw_2()
                 g.discard.add_from(g.word_list)
                 g.current_word = ''
             else:
                 print("Challenge failed")
-                #g.current_hand.add_card(g.deck.draw())
                 g.draw_2()
             g.next_player()
             continue
@@ -34,7 +32,7 @@ def main():
                 g.prev_hand().add_from(g.word_list)
                 g.prev_hand().draw_2()
                 g.discard.add_from(g.word_list)
-                g.current_word = ''
+                g.current_word = ""
             else:
                 print("Challenge failed")
                 g.current_hand.add_from(g.word_list)
@@ -50,10 +48,8 @@ def main():
         if TextInput("Claim complete?").get_bool():
             if g.is_complete():
                 g.discard.add_from(g.word_list)
-                g.current_word = ''
+                g.current_word = ""
             else:
-                # for i in range(2):
-                #     g.current_hand.add_card(g.deck.draw())
                 g.draw_2()
 
         g.next_player()

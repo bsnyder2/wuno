@@ -12,6 +12,7 @@ class Game:
         for word in self.VALID_WORDS:
             self.tr.insert(word)
 
+        # CardLists
         self.deck = Deck()
         self.word_list = CardList()
         self.discard = CardList()
