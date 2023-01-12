@@ -30,7 +30,7 @@ def main():
             if g.challenge_valid():
                 print("Challenge successful")
                 g.prev_hand().add_from(g.word_list)
-                g.prev_hand().draw_2()
+
                 g.discard.add_from(g.word_list)
                 g.current_word = ""
             else:
@@ -40,7 +40,7 @@ def main():
             continue
             
         while TextInput("Draw?").get_bool():
-            g.draw()
+            g.move_card(g.deck, g.current_hand, g.deck.top_card)
             print(g)
 
         g.place(TextInput("Place card").get_card())

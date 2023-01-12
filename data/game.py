@@ -12,11 +12,10 @@ class Game:
         for word in self.VALID_WORDS:
             self.tr.insert(word)
 
-        # CardLists
         self.deck = Deck()
         self.word_list = CardList()
         self.discard = CardList()
-        self.hands = [Hand() for i in range(n_players)]
+        self.hands = [CardList() for i in range(n_players)]
 
         self.current_index = random.randrange(n_players)
         self.current_hand = self.hands[self.current_index]
@@ -84,6 +83,29 @@ class Game:
             self.current_hand.add_card(self.deck.draw())
             self.next_player()
 
-    def draw_2(self):
-        for i in range(2):
-            self.current_hand.add_card(self.deck.draw())
+
+    def move_card(self, origin, target, card):
+        origin.cards.remove(card)
+        target.cards.add(card)
+        target.cards.sort(key=lambda c: c.LETTER)
+
+    def move_all(self,origin,target):
+        target.cards.extend(origin.cards)
+        origin.cards.clear()
+        target.cards.sort(key=lambda c: c.LETTER)
+        
+
+
+
+    # def add_card(self, card):
+    #     # adds card to hand and sorts alphabetically
+    #     self.cards.append(card)
+    #     self.cards.sort(key=lambda c: c.LETTER)
+
+    # def add_from(self, list):
+    #     self.cards.extend(list.cards)
+    #     list.cards = []
+    #     self.cards.sort(key=lambda c: c.LETTER)
+
+    # def remove_card(self, card):
+    #     self.cards.remove(card)
