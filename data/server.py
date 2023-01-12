@@ -5,7 +5,9 @@ HOST = "localhost"
 PORT = 9999
 
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+# This lets us reuse the same address without having to wait
+client.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) 
+
 try: 
     client.bind((HOST, PORT))
     client.listen(4)
