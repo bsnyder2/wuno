@@ -32,15 +32,9 @@ LETTER_FREQS = {
 
 class Card:
     def __init__(self, letter):
-        if not isinstance(letter, str):
-            raise TypeError("Invalid value assigned to card")
-
-        std_letter = letter.lower()
-        if std_letter not in LETTER_VALUES_FREQS:
+        if letter.lower() not in LETTER_FREQS:
             raise ValueError("Invalid letter assigned to card")
-
-        self.LETTER = std_letter
-        self.VALUE = LETTER_VALUES_FREQS[std_letter][0]
+        self.LETTER = letter.lower()
 
     def __eq__(self, other):
         return self.LETTER == other.LETTER
