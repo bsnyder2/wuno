@@ -1,9 +1,11 @@
 import socket
 from _thread import *
 
-HOST = "localhost"
-PORT = 9119
-
+# HOST = "localhost"
+# PORT = 9119
+# 132.162.25.81
+HOST = "0.0.0.0"
+PORT = 9889
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 # This lets us reuse the same address without having to wait
 sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) 
@@ -27,6 +29,8 @@ def thread(connection):
                 break
             else:
                 print(f"Received: {msg}")
+                print(f"Sending: {msg}")
+            connection.sendall(str.encode(msg))
         except:
             break
     print("Connection Lost")
