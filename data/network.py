@@ -4,29 +4,27 @@ class Network:
     def __init__(self):
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.host = "localhost"
-        self.portNum = 9999
+        self.portNum = 9119
         self.address = (self.host, self.portNum)
         self.id = self.connect()
         print(self.id)
 
     def connect(self):
         try:
-            # Here we attempt to connect
-            # self.client.settimeout(5.0) # will wait 5 seconds for a connection; if not found, disconnects
+            self.client.settimeout(10) # will wait 10 seconds for a connection; then it times out
             self.client.connect(self.address)
             print(f"Connecting to: {self.address}")
             return self.client.recv(2048).decode("utf-8")
         except socket.error as e:
             print(e)
-            print(f"Could not connect to:  {self.address}")
 
     def send(self, msg):
         try:
             self.client.send(str.encode(msg))
+            print("Message sent successfully")
             return self.client.recv(2048).decode("utf-8")
         except socket.error as e:
             print(e)
-            print("Could not send message")
 
 def main():
     network = Network()

@@ -17,7 +17,7 @@ class Game:
         self.deck = Deck()
         self.center = CardList()
         self.discard = CardList()
-        self.hands = [Hand() for i in range(n_players)]
+        self.hands = [CardList() for i in range(n_players)]
 
         # game status
         self.current_index = random.randrange(n_players)
