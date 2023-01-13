@@ -27,6 +27,8 @@ def thread(connection):
                 break
             else:
                 print(f"Received: {msg}")
+                print(f"Sending: {msg}")
+            connection.sendall(str.encode(msg))
         except:
             break
     print("Connection Lost")
