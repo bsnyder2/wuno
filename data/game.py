@@ -57,6 +57,9 @@ class Game:
             if self.is_current_complete():
                 print("Challenge successful")
                 self.draw_n(self.prev_hand(), 2)
+                # reset center word
+                self.center.move_all(self.discard)
+                self.current_word = ""
             else:
                 print("Challenge failed")
                 self.draw_n(self.current_hand, 2)
@@ -85,6 +88,7 @@ class Game:
         # 5. claim that current word is complete
         if TextInput("Claim complete?").get_bool():
             if self.is_current_complete():
+                # reset center word
                 self.center.move_all(self.discard)
                 self.current_word = ""
             else:
