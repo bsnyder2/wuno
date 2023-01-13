@@ -29,7 +29,7 @@ class Game:
 
         # deal cards
         for i in range(n_players):
-            self.draw_n(self.current_hand, 1)
+            self.draw_n(self.current_hand, 5)
             self.hand_forward()
 
     def __str__(self):
