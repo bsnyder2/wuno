@@ -66,7 +66,7 @@ class Game:
         if TextInput("Challenge continuable?").get_bool():
             if not self.is_current_continuable():
                 print("Challenge successful")
-                self.center.move_all(self.prev_hand(), 2)
+                self.center.move_all(self.prev_hand())
             else:
                 print("Challenge failed")
                 self.center.move_all(self.current_hand)
