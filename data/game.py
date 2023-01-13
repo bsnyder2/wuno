@@ -1,11 +1,12 @@
 import random
-from cards import Card, CardList, Deck, Hand
+from cards import CardList, Deck, Hand
 from word_trie import WordTrie
+from text_input import TextInput
 
 
 class Game:
     def __init__(self, valid_words, n_players):
-        # constants (word trie will not change after loaded)
+        # constants
         self.VALID_WORDS = valid_words
         self.N_PLAYERS = n_players
         self.tr = WordTrie()
@@ -14,16 +15,22 @@ class Game:
 
         # CardLists
         self.deck = Deck()
-        self.word_list = CardList()
+        self.center = CardList()
         self.discard = CardList()
         self.hands = [Hand() for i in range(n_players)]
 
+        # game status
         self.current_index = random.randrange(n_players)
         self.current_hand = self.hands[self.current_index]
         self.current_word = ""
 
+        # initial shuffle
         self.deck.shuffle()
-        self.deal()
+
+        # deal cards
+        for i in range(n_players):
+            self.draw_n(self.current_hand, 5)
+            self.hand_forward()
 
     def __str__(self):
         output = ""
@@ -33,11 +40,8 @@ class Game:
         else:
             output += f"Current word: {self.current_word.upper()}\n"
 
-        # is the current word valid?
-        # output += f"Word valid? {self.current_word in self.VALID_WORDS}\n"
-
-        # can a longer word be made?
-        # output += f"Longer word possible? {len(self.tr.continuant_letters(self.current_word)) > 0}\n\n"
+        output += f"Word complete? {self.is_current_complete()}\n"
+        output += f"Word continuable? {self.is_current_continuable()}\n\n"
 
         for hand_index, hand in enumerate(self.hands):
             if hand_index == self.current_index:
@@ -47,43 +51,65 @@ class Game:
 
         return output
 
-    def prev_hand(self):
-        self.prev_index = self.current_index - 1
-        if self.prev_index < 0:
-            self.prev_index = self.N_PLAYERS - 1
-        return self.hands[self.prev_index]
+    def run_turn(self):
+        # 1. challenge that current word is complete
+        if TextInput("Challenge complete?").get_bool():
+            if self.is_current_complete():
+                print("Challenge successful")
+                self.draw_n(self.prev_hand(), 2)
+            else:
+                print("Challenge failed")
+                self.draw_n(self.current_hand, 2)
+            return
 
-    def challenge_valid(self):
-        # current word continuable?
-        return not len(self.tr.continuant_letters(self.current_word)) > 0
+        # 2. challenge that current word is not continuable
+        if TextInput("Challenge continuable?").get_bool():
+            if not self.is_current_continuable():
+                print("Challenge successful")
+                self.center.move_all(self.prev_hand(), 2)
+            else:
+                print("Challenge failed")
+                self.center.move_all(self.current_hand)
+            return
 
-    def is_complete(self):
-        # current word complete?
+        # 3. draw card(s)
+        while TextInput("Draw card?").get_bool():
+            self.draw_n(self.current_hand, 1)
+
+        # 4. place card
+        pl_card = TextInput("Place card").get_card()
+        self.current_hand.place(self.center, pl_card)
+        self.current_word += pl_card.LETTER
+        print(self)
+
+        # 5. claim that current word is complete
+        if TextInput("Claim complete?").get_bool():
+            if self.is_current_complete():
+                self.center.move_all(self.discard)
+                self.current_word = ""
+            else:
+                self.draw_n(self.current_hand, 2)
+
+        self.hand_forward()
+
+    def is_current_complete(self):
         return len(self.current_word) > 2 and self.current_word in self.VALID_WORDS
 
-    def draw(self):
-        self.current_hand.add_card(self.deck.draw())
+    def is_current_continuable(self):
+        return len(self.tr.continuant_letters(self.current_word)) > 0
 
-    def place(self, card):
-        if card not in self.current_hand:
-            raise ValueError(f"Card {card} not in hand")
-        self.current_hand.remove_card(card)
-        self.word_list.add_card(card)
-        self.current_word += card.LETTER
-        self.deck.current_pile.append(Card(card.LETTER))
+    def draw_n(self, hand, n):
+        for i in range(n):
+            self.deck.draw_to(hand)
 
-    def next_player(self):
+    def prev_hand(self):
+        prev_index = self.current_index - 1
+        if prev_index < 0:
+            prev_index = self.N_PLAYERS - 1
+        return self.hands[prev_index]
+
+    def hand_forward(self):
         self.current_index += 1
-        if self.current_index >= self.N_PLAYERS:
+        if self.current_index > self.N_PLAYERS - 1:
             self.current_index = 0
-
         self.current_hand = self.hands[self.current_index]
-
-    def deal(self):
-        for i in range(self.N_PLAYERS * 3):
-            self.current_hand.add_card(self.deck.draw())
-            self.next_player()
-
-    def draw_2(self):
-        for i in range(2):
-            self.current_hand.add_card(self.deck.draw())
