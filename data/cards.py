@@ -87,6 +87,12 @@ class Deck(CardList):
     def shuffle(self):
         random.shuffle(self.cards)
 
+    def regen(self, discard):
+        if len(discard.cards) < 1:
+            raise ValueError("Deck and discard pile empty")
+        discard.move_all(self)
+        self.shuffle()
+
 
 class Hand(CardList):
     def place(self, center, card):
