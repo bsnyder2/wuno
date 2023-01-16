@@ -3,8 +3,8 @@ import pygame
 pygame.init()
 
 class Cards(pygame.sprite.Sprite):
-    def __init__(self, letter):
-        pygame.sprite.Sprite.__init__(self)
+    def __init__(self, letter = "0"):
+        super().__init__()
         self.letter = letter
         self.image = pygame.Surface((125, 175), flags = pygame.SRCALPHA)
         self.rect = self.image.get_rect()
@@ -20,7 +20,7 @@ class Cards(pygame.sprite.Sprite):
 
 class Clicker(pygame.sprite.Sprite):
     def __init__(self):
-        pygame.sprite.Sprite.__init__(self)
+        super().__init__()
         self.image = pygame.Surface((10, 10))
         self.rect = self.image.get_rect()
         self.position = pygame.mouse.get_pos()

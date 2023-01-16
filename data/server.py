@@ -1,11 +1,8 @@
 import socket
 from _thread import *
 
-# HOST = "localhost"
-# PORT = 9119
-# 132.162.25.81
-HOST = "0.0.0.0"
-PORT = 9889
+HOST = "132.162.25.81"
+PORT = 50012
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 # This lets us reuse the same address without having to wait
 sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) 
@@ -16,6 +13,7 @@ try:
     print("Waiting for connection...connected")
 except socket.error as e:
     print(e)
+    print(f"Cannot connect to: {(HOST, PORT)}")
 
 def thread(connection):
     connection.send(str.encode("Connection successful"))

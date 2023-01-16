@@ -40,8 +40,8 @@ class Game:
         else:
             output += f"Current word: {self.current_word.upper()}\n"
 
-        output += f"Word complete? {self.is_current_complete()}\n"
-        output += f"Word continuable? {self.is_current_continuable()}\n\n"
+        # output += f"Word complete? {self.is_current_complete()}\n"
+        # output += f"Word continuable? {self.is_current_continuable()}\n\n"
 
         for hand_index, hand in enumerate(self.hands):
             if hand_index == self.current_index:
@@ -104,6 +104,8 @@ class Game:
 
     def draw_n(self, hand, n):
         for i in range(n):
+            if len(self.deck.cards) < 1:
+                self.deck.regen(self.discard)
             self.deck.draw_to(hand)
 
     def prev_hand(self):
