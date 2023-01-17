@@ -23,7 +23,7 @@ class Button(pygame.sprite.Sprite):
     def __init__(self, width, height, pos_x, pos_y):
         super().__init__()
         # common scaled font for all buttons
-        #self.font = pygame.font.SysFont(None, width)
+        self.font = pygame.font.SysFont(None, width)
 
         # image
         self.image = pygame.Surface((width, height))
@@ -68,23 +68,23 @@ class CardButton(Button):
         self.is_selected = False
 
         # letter
-        #self.text = self.font.render(letter.upper(), False, (0, 0, 0))
-        #self.text_w = self.text.get_width()
-        #self.text_h = self.text.get_height()
-        #self.image.blit(
-            #self.text, (25 - self.text_w / 2, 35 - self.text_h / 2))
+        self.text = self.font.render(letter.upper(), False, (0, 0, 0))
+        self.text_w = self.text.get_width()
+        self.text_h = self.text.get_height()
+        self.image.blit(
+            self.text, (25 - self.text_w / 2, 35 - self.text_h / 2))
         CardButton.card_group.add(self)
 
     def select(self):
         self.image.fill((0, 255, 0))
-        # self.image.blit(
-        #     self.text, (25 - self.text_w / 2, 35 - self.text_h / 2))
+        self.image.blit(
+            self.text, (25 - self.text_w / 2, 35 - self.text_h / 2))
         self.is_selected = True
 
     def deselect(self):
         self.image.fill(self.color)
-        # self.image.blit(
-        #     self.text, (25 - self.text_w / 2, 35 - self.text_h / 2))
+        self.image.blit(
+            self.text, (25 - self.text_w / 2, 35 - self.text_h / 2))
         self.is_selected = False
 
     def update(self):
@@ -105,21 +105,15 @@ def main():
     # invisible mouse sprite group
     cursor_group = pygame.sprite.GroupSingle(Cursor())
 
-    # buttons
+    # buttons - adds to class group on creation
     challenge_button = Button(50, 50, 100, 100)
     susanne_button = SusanneButton(60, 30, 200, 200)
     c1 = CardButton(300, 300, "a")
     c2 = CardButton(370, 350, "e")
     c3 = CardButton(100, 200, "J")
 
-    button_group = pygame.sprite.Group()
-    button_group.add(challenge_button)
-    button_group.add(susanne_button)
-    button_group.add(c1, c2, c3)
-    
-
     # initial draw buttons
-    button_group.draw(screen)
+    Button.button_group.draw(screen)
 
     # True loop not necessary for final module, should be combined w GUI loop later on
     while True:
@@ -133,13 +127,11 @@ def main():
                 sys.exit()
             # if mouse clicked, update buttons if hit and redraw
             if event.type == pygame.MOUSEBUTTONDOWN:
-                for card in CardButton.card_group:
-                    if pygame.sprite.collide_rect(cursor_group.sprite, card):
-                        card.update()
-                        
-                button_group.draw(screen)
+                for button in Button.button_group:
+                    if pygame.sprite.collide_rect(cursor_group.sprite, button):
+                        button.update()
 
-    
+                Button.button_group.draw(screen)
 
         # update display at 60 fps
         pygame.display.update()
