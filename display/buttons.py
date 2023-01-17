@@ -55,6 +55,13 @@ class SusanneButton(Button):
         self.image.fill(self.color)
 
 
+class CardButton(Button):
+    # CardButton should be attribute of Card?
+
+    def __init__(self, pos_x, pos_y):
+        super().__init__(50, 70, pos_x, pos_y)
+
+
 def main():
     pygame.init()
     clock = pygame.time.Clock()
@@ -68,10 +75,12 @@ def main():
     # buttons
     challenge_button = Button(50, 50, 100, 100)
     susanne_button = SusanneButton(60, 30, 200, 200)
+    card_button = CardButton(300, 300)
 
     button_group = pygame.sprite.Group()
     button_group.add(challenge_button)
     button_group.add(susanne_button)
+    button_group.add(card_button)
 
     # initial draw buttons
     button_group.draw(screen)
