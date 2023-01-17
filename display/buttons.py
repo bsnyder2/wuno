@@ -18,11 +18,12 @@ class Cursor(pygame.sprite.Sprite):
 
 class Button(pygame.sprite.Sprite):
     # Button Superclass: this is what specific buttons should inherit from
+    button_group = pygame.sprite.Group()
 
     def __init__(self, width, height, pos_x, pos_y):
         super().__init__()
         # common scaled font for all buttons
-        self.font = pygame.font.SysFont(None, width)
+        #self.font = pygame.font.SysFont(None, width)
 
         # image
         self.image = pygame.Surface((width, height))
@@ -32,8 +33,9 @@ class Button(pygame.sprite.Sprite):
         # rect
         self.rect = self.image.get_rect()
         self.rect.center = (pos_x, pos_y)
+        Button.button_group.add(self)
 
-    # on click
+    # on clickS
     def update(self):
         if self.color == (255, 255, 255):
             self.color = (255, 0, 0)
@@ -59,35 +61,37 @@ class SusanneButton(Button):
 
 class CardButton(Button):
     # CardButton should be attribute of Card?
+    card_group = pygame.sprite.Group()
 
     def __init__(self, pos_x, pos_y, letter):
         super().__init__(50, 70, pos_x, pos_y)
         self.is_selected = False
 
         # letter
-        self.text = self.font.render(letter.upper(), False, (0, 0, 0))
-        self.text_w = self.text.get_width()
-        self.text_h = self.text.get_height()
-        self.image.blit(
-            self.text, (25 - self.text_w / 2, 35 - self.text_h / 2))
+        #self.text = self.font.render(letter.upper(), False, (0, 0, 0))
+        #self.text_w = self.text.get_width()
+        #self.text_h = self.text.get_height()
+        #self.image.blit(
+            #self.text, (25 - self.text_w / 2, 35 - self.text_h / 2))
+        CardButton.card_group.add(self)
 
     def select(self):
         self.image.fill((0, 255, 0))
-        self.image.blit(
-            self.text, (25 - self.text_w / 2, 35 - self.text_h / 2))
+        # self.image.blit(
+        #     self.text, (25 - self.text_w / 2, 35 - self.text_h / 2))
         self.is_selected = True
 
     def deselect(self):
         self.image.fill(self.color)
-        self.image.blit(
-            self.text, (25 - self.text_w / 2, 35 - self.text_h / 2))
+        # self.image.blit(
+        #     self.text, (25 - self.text_w / 2, 35 - self.text_h / 2))
         self.is_selected = False
 
-    def update(self, card_group):
+    def update(self):
         if self.is_selected:
             self.deselect()
         else:
-            for card in card_group:
+            for card in CardButton.card_group:
                 card.deselect()
             self.select()
 
@@ -113,7 +117,6 @@ def main():
     button_group.add(susanne_button)
     button_group.add(c1, c2, c3)
     
-    card_group = pygame.sprite.Group(c1, c2, c3)
 
     # initial draw buttons
     button_group.draw(screen)
@@ -130,11 +133,13 @@ def main():
                 sys.exit()
             # if mouse clicked, update buttons if hit and redraw
             if event.type == pygame.MOUSEBUTTONDOWN:
-                for card in card_group:
+                for card in CardButton.card_group:
                     if pygame.sprite.collide_rect(cursor_group.sprite, card):
-                        card.update(card_group)
+                        card.update()
                         
                 button_group.draw(screen)
+
+    
 
         # update display at 60 fps
         pygame.display.update()
