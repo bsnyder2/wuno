@@ -1,20 +1,37 @@
 import sys
 import pygame
 
-# Button Superclass: this is what specific buttons should inherit from
+
+class Cursor(pygame.sprite.Sprite):
+    # invisible mouse sprite class: there is only one of these objects for the whole game --> functions as our "clicker"
+
+    def __init__(self):
+        super().__init__()
+        # cursor hitbox
+        self.rect = pygame.Rect(0, 0, 1, 1)
+
+    def update(self):
+        self.rect.center = pygame.mouse.get_pos()
+
+    def check_hits(self, button_group):
+        for button in button_group:
+            if pygame.sprite.collide_rect(self, button):
+                button.update()
+
+
 class Button(pygame.sprite.Sprite):
-    button_group = pygame.sprite.Group()
+    # Button Superclass: this is what specific buttons should inherit from
 
     def __init__(self, width, height, pos_x, pos_y):
         super().__init__()
-        self.name = str(self)
-        self.color = (255, 255, 255)
         self.image = pygame.Surface([width, height])
+        self.color = (255, 255, 255)
         self.image.fill(self.color)
+
         self.rect = self.image.get_rect()
         self.rect.center = [pos_x, pos_y]
-        Button.button_group.add(self)
 
+    # on click
     def update(self):
         if self.color == (255, 255, 255):
             self.color = (255, 0, 0)
@@ -23,27 +40,10 @@ class Button(pygame.sprite.Sprite):
         self.image.fill(self.color)
         # replace/add on specific response depending on what you want your button to do
 
-# invisible mouse sprite class: there is only one of these objects for the whole game --> functions as our "clicker"
-class Cursor(pygame.sprite.Sprite):
-    def __init__(self):
-        super().__init__()
-        self.color = (255, 255, 255)
-        self.image = pygame.Surface([1, 1])
-        self.rect = self.image.get_rect()
 
-    def update(self):
-        self.rect.center = pygame.mouse.get_pos()
+class SusanneButton(Button):
+    # Example Button Subclass
 
-    def shoot(self):
-        # action that happens when ANY button is pressed
-        if pygame.sprite.spritecollide(follower, Button.button_group, dokill=False):
-            # actions that happen when SPECIFIC button is pressed
-            for button in Button.button_group:
-                if pygame.sprite.collide_rect(follower, button):
-                    button.update()
-
-# Example Button Subclass
-class Susanne_Button(Button):
     def __init__(self, width, height, pos_x, pos_y):
         super().__init__(width, height, pos_x, pos_y)
 
@@ -62,32 +62,37 @@ def main():
     # Set up the drawing window
     screen = pygame.display.set_mode([500, 500])
 
-    # button group
-    challenge_button = Button(50, 50, 100, 100)
-    #susanne_button = Susanne_Button(60,30,200,200)
-
     # invisible mouse sprite group
-    follower = Cursor()
-    follower_group = pygame.sprite.Group()
-    follower_group.add(follower)
+    cursor_group = pygame.sprite.GroupSingle(Cursor())
+
+    # buttons
+    challenge_button = Button(50, 50, 100, 100)
+    susanne_button = SusanneButton(60, 30, 200, 200)
+
+    button_group = pygame.sprite.Group()
+    button_group.add(challenge_button)
+    button_group.add(susanne_button)
+
+    # initial draw buttons
+    button_group.draw(screen)
 
     # True loop not necessary for final module, should be combined w GUI loop later on
     while True:
+        # update cursor location
+        cursor_group.update()
+
+        # every frame, check:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-            # triggers button response
+            # if mouse clicked, update buttons if hit and redraw
             if event.type == pygame.MOUSEBUTTONDOWN:
-                follower.shoot()
+                cursor_group.sprite.check_hits(button_group)
+                button_group.draw(screen)
 
-        # Flip the display
-        pygame.display.flip()
-
-        # button display
-        Button.button_group.draw(screen)
-        follower_group.draw(screen)
-        follower_group.update()
+        # update display at 60 fps
+        pygame.display.update()
         clock.tick(60)
 
 
