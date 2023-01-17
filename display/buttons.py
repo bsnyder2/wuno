@@ -35,7 +35,7 @@ class Button(pygame.sprite.Sprite):
         self.rect.center = (pos_x, pos_y)
         Button.button_group.add(self)
 
-    # on clickS
+    # on click
     def update(self):
         if self.color == (255, 255, 255):
             self.color = (255, 0, 0)
