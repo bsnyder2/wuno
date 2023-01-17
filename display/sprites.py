@@ -1,11 +1,13 @@
 import pygame
+from buttons import CardButton
 
 pygame.init()
 
-class Cards(pygame.sprite.Sprite):
+class Cards():
     def __init__(self, letter = "0"):
-        super().__init__()
         self.letter = letter
+        self.card_button = CardButton(self.letter)
+        
         self.image = pygame.Surface((125, 175), flags = pygame.SRCALPHA)
         self.rect = self.image.get_rect()
 
