@@ -1,12 +1,12 @@
 import sys
 import pygame
-import display.buttons
 import data.game
+from display.buttons import Cursor, Button, CardButton
 
 
 def main():
     # creates a set of valid words from given file
-    file = open(sys.path[0] + "/../wordsets/words-58k.txt", "r")
+    file = open(sys.path[0] + "wordsets/words-58k.txt", "r")
     valid_words = {line.strip() for line in file}
 
     # creates game with wordset valid_words and 4 players
@@ -24,21 +24,21 @@ def main():
     screen = pygame.display.set_mode((500, 500))
 
     # invisible mouse sprite group
-    display.buttons.Cursor()
+    Cursor()
 
     # buttons - adds to class group on creation
-    display.buttons.Button(50, 50, 100, 100)
-    display.buttons.CardButton(300, 300, "a")
-    display.buttons.CardButton(370, 350, "e")
-    display.buttons.CardButton(100, 200, "J")
+    Button(50, 50, 100, 100)
+    CardButton(300, 300, "a")
+    CardButton(370, 350, "e")
+    CardButton(100, 200, "J")
 
     # initial draw buttons
-    display.buttons.Button.button_group.draw(screen)
+    Button.button_group.draw(screen)
 
     # True loop not necessary for final module, should be combined w GUI loop later on
     while True:
         # update cursor location
-        display.buttons.Cursor.cursor_group.update()
+        Cursor.cursor_group.update()
 
         # every frame, check:
         for event in pygame.event.get():
@@ -46,9 +46,9 @@ def main():
                 pygame.quit()
                 sys.exit()
             # if mouse clicked and button group hit, update and redraw button group
-            if event.type == pygame.MOUSEBUTTONDOWN and pygame.sprite.groupcollide(display.buttons.Cursor.cursor_group, display.buttons.Button.button_group, False, False):
-                display.buttons.Button.button_group.update()
-                display.buttons.Button.button_group.draw(screen)
+            if event.type == pygame.MOUSEBUTTONDOWN and pygame.sprite.groupcollide(Cursor.cursor_group, Button.button_group, False, False):
+                Button.button_group.update()
+                Button.button_group.draw(screen)
 
         # update display at 60 fps
         pygame.display.update()

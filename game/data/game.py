@@ -1,7 +1,7 @@
 import random
 import data.cards
 from data.text_input import TextInput
-from data.word_trie import WordTrie
+import data.word_trie
 
 
 class Game:
@@ -9,7 +9,7 @@ class Game:
         # constants
         self.VALID_WORDS = valid_words
         self.N_PLAYERS = n_players
-        self.tr = WordTrie()
+        self.tr = data.word_trie.WordTrie()
         for word in self.VALID_WORDS:
             self.tr.insert(word)
 
