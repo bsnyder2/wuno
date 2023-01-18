@@ -1,36 +1,35 @@
 import pygame
+from buttons import CardButton
 
 pygame.init()
 
-class Cards(pygame.sprite.Sprite):
+class Cards():
     def __init__(self, letter = "0"):
-        super().__init__()
         self.letter = letter
+        self.card_button = CardButton(self.letter)
+        
         self.image = pygame.Surface((125, 175), flags = pygame.SRCALPHA)
+        self.size = (125, 175)
         self.rect = self.image.get_rect()
 
     def set_position(self, position):
-        self.rect.center = position
+        self.rect.update((position), self.size)
 
-    def set_color(self, color):
-        self.image.fill(color)
+    def set_size(self, size):
+        self.image = pygame.Surface((size[0], size[1]), flags = pygame.SRCALPHA)
+        self.size = size
+        self.rect = self.image.get_rect()
 
     def get_letter(self):
         return self.letter
 
-class Clicker(pygame.sprite.Sprite):
+class Cursor(pygame.sprite.Sprite):
+    # invisible mouse sprite class: there is only one of these objects for the whole game --> functions as our "clicker"
+
     def __init__(self):
         super().__init__()
-        self.image = pygame.Surface((10, 10))
-        self.rect = self.image.get_rect()
-        self.position = pygame.mouse.get_pos()
-        self.click = False
+        # cursor hitbox
+        self.rect = pygame.Rect(0, 0, 1, 1)
 
     def update(self):
-        self.position = pygame.mouse.get_pos()
-        self.rect.update(self.position, (10, 10))
-        self.click = pygame.mouse.get_pressed(num_buttons= 3)[0]
-        if self.click == False:
-            self.image.fill((100, 100, 100))
-        if self.click == True:
-            self.image.fill((255, 0, 0))
+        self.rect.center = pygame.mouse.get_pos()
