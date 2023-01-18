@@ -1,7 +1,7 @@
 import random
-from cards import CardList, Deck, Hand
-from word_trie import WordTrie
-from text_input import TextInput
+import cards
+import text_input
+import word_trie
 
 
 class Game:
@@ -9,15 +9,15 @@ class Game:
         # constants
         self.VALID_WORDS = valid_words
         self.N_PLAYERS = n_players
-        self.tr = WordTrie()
+        self.tr = word_trie.WordTrie()
         for word in self.VALID_WORDS:
             self.tr.insert(word)
 
         # CardLists
-        self.deck = Deck()
-        self.center = CardList()
-        self.discard = CardList()
-        self.hands = [Hand() for i in range(n_players)]
+        self.deck = cards.Deck()
+        self.center = cards.CardList()
+        self.discard = cards.CardList()
+        self.hands = [cards.Hand() for i in range(n_players)]
 
         # game status
         self.current_index = random.randrange(n_players)
@@ -53,7 +53,7 @@ class Game:
 
     def run_turn(self):
         # 1. challenge that current word is complete
-        if TextInput("Challenge complete?").get_bool():
+        if text_input.TextInput("Challenge complete?").get_bool():
             if self.is_current_complete():
                 print("Challenge successful")
                 self.draw_n(self.prev_hand(), 2)
@@ -66,7 +66,7 @@ class Game:
             return
 
         # 2. challenge that current word is not continuable
-        if TextInput("Challenge continuable?").get_bool():
+        if text_input.TextInput("Challenge continuable?").get_bool():
             if not self.is_current_continuable():
                 print("Challenge successful")
                 self.center.move_all(self.prev_hand())
@@ -76,17 +76,17 @@ class Game:
             return
 
         # 3. draw card(s)
-        while TextInput("Draw card?").get_bool():
+        while text_input.TextInput("Draw card?").get_bool():
             self.draw_n(self.current_hand, 1)
 
         # 4. place card
-        pl_card = TextInput("Place card").get_card()
+        pl_card = text_input.TextInput("Place card").get_card()
         self.current_hand.place(self.center, pl_card)
         self.current_word += pl_card.LETTER
         print(self)
 
         # 5. claim that current word is complete
-        if TextInput("Claim complete?").get_bool():
+        if text_input.TextInput("Claim complete?").get_bool():
             if self.is_current_complete():
                 # reset center word
                 self.center.move_all(self.discard)

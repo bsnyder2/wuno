@@ -1,5 +1,5 @@
 import sys
-from game import Game
+import game
 
 
 def main():
@@ -8,11 +8,12 @@ def main():
     valid_words = {line.strip() for line in file}
 
     # creates game with wordset valid_words and 4 players
-    g = Game(valid_words, 4)
+    g = game.Game(valid_words, 4)
 
     while True:
         print(g)
         g.run_turn()
+
 
 if __name__ == "__main__":
     main()
