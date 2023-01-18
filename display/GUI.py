@@ -13,21 +13,39 @@ def GUI(hands, nplayers = 1):
 
     running = True
 
+    selectedcard = -1
+    confirmedcard = -1
+    
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                for i in range(len(cardlist)):
+                    if pygame.sprite.collide_rect(cardlist[i], clicker):
+                        if selectedcard == i:
+                            confirmedcard = i
+                        else:
+                            selectedcard = i
 
         screen.fill((255, 255, 255))
 
-        cardgroup = pygame.sprite.Group
+        deck = pygame.surface.Surface((125, 175), flags = pygame.SRCALPHA)
+        deck.fill((255, 255, 255))
+
+
+
+        cardlist = []
         
         for i in range(len(hands[0])):
             card = sprites.Cards(hands[0][i])
-            cardgroup.add(card)
+            cardlist.append(card)
+            if len(cardlist) - 1 == selectedcard and selectedcard != confirmedcard:
+                card.set_size((175, 245))
             card.set_color((0, 0, 0))
 
-            innersurf = pygame.Surface((115, 165), flags = pygame.SRCALPHA)
+
+            innersurf = pygame.Surface((card.image.get_width() - 10, card.image.get_height() -10), flags = pygame.SRCALPHA)
             innersurf.fill((255, 255, 255))
             card.image.blit(innersurf, (card.image.get_width() / 2 - innersurf.get_width() / 2, card.image.get_height() / 2 - innersurf.get_height() / 2))
 
@@ -35,10 +53,16 @@ def GUI(hands, nplayers = 1):
             letter = font.render(hands[0][i], True, (255, 0, 0))
             card.image.blit(letter, (card.image.get_width() / 2 - letter.get_width() / 2, card.image.get_height() / 2 - letter.get_height() / 2))
 
-            card_center = (
-                (SCREEN_WIDTH - card.image.get_width()) / 2 + (len(hands[0]) - 1 - 2 * i) * 62.5,
-                ((SCREEN_HEIGHT - card.image.get_height()))
-            )
+            if len(cardlist)-1 != confirmedcard:
+                card_center = (
+                    (SCREEN_WIDTH - card.image.get_width()) / 2 + (len(hands[0]) - 1 - 2 * i) * 62.5,
+                    ((SCREEN_HEIGHT - card.image.get_height()))
+                )
+            else:
+                card_center = (
+                    SCREEN_WIDTH / 2 - card.image.get_width() / 2,
+                    SCREEN_HEIGHT / 2 - card.image.get_height() / 2
+                )
 
             card.set_position(card_center)
 
@@ -98,13 +122,8 @@ def GUI(hands, nplayers = 1):
 
                 screen.blit(card.image, surf_center)
 
-        clicker = sprites.Clicker()
+        clicker = sprites.Cursor()
         clicker.update()
-
-        clickergroup = pygame.sprite.GroupSingle
-        clickergroup.add(clicker)
-
-        screen.blit(clicker.image, clicker.position)
 
         pygame.display.flip()
 
