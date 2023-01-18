@@ -50,21 +50,6 @@ class Button(pygame.sprite.Sprite):
             self.image.fill(self.color)
 
 
-class SusanneButton(Button):
-    # Example Button Subclass
-
-    def __init__(self, width, height, pos_x, pos_y):
-        super().__init__(width, height, pos_x, pos_y)
-
-    def update(self):
-        if pygame.sprite.collide_rect(Cursor.cursor_group.sprite, self):
-            if self.color == (255, 255, 255):
-                self.color = (0, 255, 0)
-            else:
-                self.color = (255, 255, 255)
-            self.image.fill(self.color)
-
-
 class CardButton(Button):
     # CardButton should be attribute of Card?
     card_group = pygame.sprite.Group()
@@ -117,7 +102,6 @@ def main():
 
     # buttons - adds to class group on creation
     Button(50, 50, 100, 100)
-    SusanneButton(60, 30, 200, 200)
     CardButton(300, 300, "a")
     CardButton(370, 350, "e")
     CardButton(100, 200, "J")
