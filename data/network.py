@@ -3,7 +3,7 @@ import socket
 class Network:
     def __init__(self):
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.host = "localhost"
+        self.host = "127.0.0.1"
         self.portNum = 50012
         self.address = (self.host, self.portNum)
         self.id = self.connect()
