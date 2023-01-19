@@ -12,6 +12,7 @@ class Cursor(pygame.sprite.Sprite):
         super().__init__()
         # cursor hitbox
         self.rect = pygame.Rect(0, 0, 1, 1)
+        Cursor.cursor_group.add(self)
 
     def update(self):
         self.rect.center = pygame.mouse.get_pos()

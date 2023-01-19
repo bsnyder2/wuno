@@ -8,7 +8,7 @@ import display.gui_test
 class Game:
     def __init__(self, valid_words, n_players):
         self.gui = display.gui_test.GUI(self)
-        
+
         # constants
         self.VALID_WORDS = valid_words
         self.N_PLAYERS = n_players
@@ -86,7 +86,7 @@ class Game:
         pl_card = TextInput("Place card").get_card()
         self.current_hand.place(self.center, pl_card)
         self.current_word += pl_card.LETTER
-        print(self)
+        self.gui.update_hand()
 
         # 5. claim that current word is complete
         if TextInput("Claim complete?").get_bool():
