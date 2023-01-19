@@ -10,8 +10,6 @@ class Cursor(pygame.sprite.Sprite):
 
     def __init__(self):
         super().__init__()
-        Cursor.cursor_group.add(self)
-
         # cursor hitbox
         self.rect = pygame.Rect(0, 0, 1, 1)
 

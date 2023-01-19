@@ -2,10 +2,13 @@ import random
 import data.cards
 from data.text_input import TextInput
 import data.word_trie
+import display.gui_test
 
 
 class Game:
     def __init__(self, valid_words, n_players):
+        self.gui = display.gui_test.GUI(self)
+        
         # constants
         self.VALID_WORDS = valid_words
         self.N_PLAYERS = n_players
