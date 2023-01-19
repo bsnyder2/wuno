@@ -1,7 +1,7 @@
 import random
-from cards import CardList, Deck, Hand
-from word_trie import WordTrie
-from text_input import TextInput
+import data.cards
+from data.text_input import TextInput
+import data.word_trie
 
 
 class Game:
@@ -9,15 +9,15 @@ class Game:
         # constants
         self.VALID_WORDS = valid_words
         self.N_PLAYERS = n_players
-        self.tr = WordTrie()
+        self.tr = data.word_trie.WordTrie()
         for word in self.VALID_WORDS:
             self.tr.insert(word)
 
         # CardLists
-        self.deck = Deck()
-        self.center = CardList()
-        self.discard = CardList()
-        self.hands = [Hand() for i in range(n_players)]
+        self.deck = data.cards.Deck()
+        self.center = data.cards.CardList()
+        self.discard = data.cards.CardList()
+        self.hands = [data.cards.Hand() for i in range(n_players)]
 
         # game status
         self.current_index = random.randrange(n_players)

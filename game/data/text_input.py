@@ -1,4 +1,4 @@
-from cards import Card
+import data.cards
 
 
 class TextInput:
@@ -27,4 +27,4 @@ class TextInput:
             letter = input(f"> {self.PROMPT}: ").strip().lower()
             if len(letter) != 1:
                 continue
-            return Card(letter)
+            return data.cards.Card(letter)
