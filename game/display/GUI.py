@@ -1,6 +1,6 @@
 import pygame
 import random
-import display.sprites
+import sprites
 
 pygame.init()
 
@@ -15,6 +15,8 @@ def GUI(hands, nplayers = 1):
 
     selectedcard = -1
     confirmedcard = -1
+    challenged = False
+    completed = False
     
     while running:
         for event in pygame.event.get():
@@ -27,22 +29,41 @@ def GUI(hands, nplayers = 1):
                             confirmedcard = i
                         else:
                             selectedcard = i
+                    if pygame.Rect.colliderect(challengerect, clicker):
+                        challenged = True
+                    if pygame.Rect.colliderect(completerect, clicker):
+                        completed = True
 
         screen.fill((255, 255, 255))
 
         deck = pygame.surface.Surface((125, 175), flags = pygame.SRCALPHA)
         deck.fill((255, 255, 255))
 
+        challenge = pygame.surface.Surface((150, 75))
+        challengerect = challenge.get_rect()
+        challengerect.update((650 - challenge.get_width() / 2, 300 - challenge.get_height() / 2), (150, 75))
+        challenge.fill((255, 255, 0))
+        screen.blit(challenge, (650 - challenge.get_width() / 2, 300 - challenge.get_height() / 2))
 
+        complete = pygame.surface.Surface((150, 75))
+        completerect = complete.get_rect()
+        completerect.update((650 - complete.get_width() / 2, 500 - complete.get_height() / 2), (150, 75))
+        complete.fill((255, 255, 0))
+        screen.blit(complete, (650 - complete.get_width() / 2, 500 - complete.get_height() / 2))
+
+        if challenged:
+            print("challenge")
+        if completed:
+            print("completed")
 
         cardlist = []
         
         for i in range(len(hands[0])):
-            card = display.sprites.Cards(hands[0][i])
+            card = sprites.Cards(hands[0][i])
             cardlist.append(card)
             if len(cardlist) - 1 == selectedcard and selectedcard != confirmedcard:
                 card.set_size((175, 245))
-            card.set_color((0, 0, 0))
+            card.image.fill((0, 0, 0))
 
 
             innersurf = pygame.Surface((card.image.get_width() - 10, card.image.get_height() -10), flags = pygame.SRCALPHA)
@@ -70,8 +91,8 @@ def GUI(hands, nplayers = 1):
 
         if nplayers > 1:
             for i in range(hands[1]):
-                card = display.sprites.Cards()
-                card.set_color((0, 0, 0))
+                card = sprites.Cards()
+                card.image.fill((0, 0, 0))
 
                 innersurf = pygame.Surface((115, 165), flags = pygame.SRCALPHA)
                 innersurf.fill((255, 255, 255))
@@ -85,11 +106,11 @@ def GUI(hands, nplayers = 1):
                 )
 
                 screen.blit(card.image, surf_center)
-        
+
         if nplayers > 2:
             for i in range(hands[2]):
-                card = display.sprites.Cards()
-                card.set_color((0, 0, 0))
+                card = sprites.Cards()
+                card.image.fill((0, 0, 0))
 
                 innersurf = pygame.Surface((115, 165), flags = pygame.SRCALPHA)
                 innersurf.fill((255, 255, 255))
@@ -106,8 +127,8 @@ def GUI(hands, nplayers = 1):
 
         if nplayers > 3:
             for i in range(hands[3]):
-                card = display.sprites.Cards()
-                card.set_color((0, 0, 0))
+                card = sprites.Cards()
+                card.image.fill((0, 0, 0))
 
                 innersurf = pygame.Surface((115, 165), flags = pygame.SRCALPHA)
                 innersurf.fill((255, 255, 255))
@@ -122,8 +143,10 @@ def GUI(hands, nplayers = 1):
 
                 screen.blit(card.image, surf_center)
 
-        clicker = display.sprites.Cursor()
+        clicker = sprites.Cursor()
         clicker.update()
+
+        data = [0, hands[0], completed, challenged]
 
         pygame.display.flip()
 
