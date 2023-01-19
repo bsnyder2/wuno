@@ -1,5 +1,19 @@
-import display.gui_test
-import display.text_gui
+import sys
+import data.game
 
-# display.gui_test.main()
-display.text_gui.main()
+
+def main():
+    # creates a set of valid words from given file
+    file = open(sys.path[0] + "/wordsets/words-58k.txt", "r")
+    valid_words = {line.strip() for line in file}
+
+    # creates game with wordset valid_words and 4 players
+    g = data.game.Game(valid_words, 4)
+
+    while True:
+        # print(g)
+        g.run_turn()
+
+
+if __name__ == "__main__":
+    main()

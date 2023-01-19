@@ -1,20 +1,11 @@
 import sys
 import pygame
-import data.game
 from display.buttons import Cursor, Button, CardButton
 
 
-def main():
-    # creates a set of valid words from given file
-    file = open(sys.path[0] + "wordsets/words-58k.txt", "r")
-    valid_words = {line.strip() for line in file}
-
-    # creates game with wordset valid_words and 4 players
-    g = data.game.Game(valid_words, 4)
-
-    while True:
-        print(g)
-        g.run_turn()
+class GUI:
+    def __init__(self, game):
+        self.game = game
 
 
 def main():
@@ -53,15 +44,6 @@ def main():
         # update display at 60 fps
         pygame.display.update()
         clock.tick(60)
-
-
-# TODO
-# make a card subclass of button
-    # def show_card(self):
-    #     pass
-    #     #gets called when you press a card in your hand
-    #     #move card up and magnify it
-# make challenge button --> maybe 2? one for complete, one for continuable?
 
 
 if __name__ == "__main__":
