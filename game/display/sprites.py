@@ -1,5 +1,5 @@
 import pygame
-from buttons import CardButton
+from display.buttons import CardButton
 
 pygame.init()
 

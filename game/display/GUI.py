@@ -1,6 +1,6 @@
 import pygame
 import random
-import sprites
+import display.sprites
 
 pygame.init()
 
@@ -38,7 +38,7 @@ def GUI(hands, nplayers = 1):
         cardlist = []
         
         for i in range(len(hands[0])):
-            card = sprites.Cards(hands[0][i])
+            card = display.sprites.Cards(hands[0][i])
             cardlist.append(card)
             if len(cardlist) - 1 == selectedcard and selectedcard != confirmedcard:
                 card.set_size((175, 245))
@@ -70,7 +70,7 @@ def GUI(hands, nplayers = 1):
 
         if nplayers > 1:
             for i in range(hands[1]):
-                card = sprites.Cards()
+                card = display.sprites.Cards()
                 card.set_color((0, 0, 0))
 
                 innersurf = pygame.Surface((115, 165), flags = pygame.SRCALPHA)
@@ -88,7 +88,7 @@ def GUI(hands, nplayers = 1):
         
         if nplayers > 2:
             for i in range(hands[2]):
-                card = sprites.Cards()
+                card = display.sprites.Cards()
                 card.set_color((0, 0, 0))
 
                 innersurf = pygame.Surface((115, 165), flags = pygame.SRCALPHA)
@@ -106,7 +106,7 @@ def GUI(hands, nplayers = 1):
 
         if nplayers > 3:
             for i in range(hands[3]):
-                card = sprites.Cards()
+                card = display.sprites.Cards()
                 card.set_color((0, 0, 0))
 
                 innersurf = pygame.Surface((115, 165), flags = pygame.SRCALPHA)
@@ -122,7 +122,7 @@ def GUI(hands, nplayers = 1):
 
                 screen.blit(card.image, surf_center)
 
-        clicker = sprites.Cursor()
+        clicker = display.sprites.Cursor()
         clicker.update()
 
         pygame.display.flip()

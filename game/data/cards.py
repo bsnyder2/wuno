@@ -1,5 +1,6 @@
 import random
 
+
 LETTER_FREQS = {
     "a": 9,
     "b": 2,
