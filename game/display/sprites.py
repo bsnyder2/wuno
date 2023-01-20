@@ -34,7 +34,7 @@ class Cards(pygame.sprite.Sprite):
     def __init__(self, text = "0"):
         super().__init__()
         self.text = text
-        self.image = pygame.Surface((125, 175), flags = pygame.SRCALPHA)
+        self.image = pygame.image.load(sys.path[0] + "/flame pngs/A.png")
         self.size = (125, 175)
         self.rect = self.image.get_rect()
 

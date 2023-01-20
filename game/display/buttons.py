@@ -1,5 +1,6 @@
 import abc
 import pygame
+import sys
 
 pygame.init()
 
@@ -33,12 +34,12 @@ class Button(pygame.sprite.Sprite, abc.ABC):
         self.is_active = True
 
         # common scaled font for all buttons
-        self.font = pygame.font.SysFont(None, int(height / 2))
+        # self.font = pygame.font.SysFont(None, int(height / 2))
 
         # image
-        self.image = pygame.Surface((width, height))
+        self.image = pygame.image.load(sys.path[0] + "/display/flame pngs/A.png")
         self.color = (255, 255, 255)
-        self.image.fill(self.color)
+        #self.image.fill(self.color)
 
         # rect
         self.rect = self.image.get_rect()
@@ -60,11 +61,11 @@ class CardButton(Button):
         self.card = card
 
         # letter
-        self.text = self.font.render(card.LETTER.upper(), False, (0, 0, 0))
-        self.text_w = self.text.get_width()
-        self.text_h = self.text.get_height()
-        self.image.blit(
-            self.text, (25 - self.text_w / 2, 35 - self.text_h / 2))
+        # self.text = self.font.render(card.LETTER.upper(), False, (0, 0, 0))
+        # self.text_w = self.text.get_width()
+        # self.text_h = self.text.get_height()
+        # self.image.blit(
+        #     self.text, (25 - self.text_w / 2, 35 - self.text_h / 2))
 
     # on click
     def update(self):
@@ -82,8 +83,8 @@ class CardButton(Button):
 
     def redraw(self, color):
         self.image.fill(color)
-        self.image.blit(
-            self.text, (25 - self.text_w / 2, 35 - self.text_h / 2))
+        # self.image.blit(
+        #     self.text, (25 - self.text_w / 2, 35 - self.text_h / 2))
 
 
 class ActionButton(Button):
@@ -93,11 +94,11 @@ class ActionButton(Button):
         self.word = word
 
         # word
-        self.text = self.font.render(word, False, (0, 0, 0))
-        self.text_w = self.text.get_width()
-        self.text_h = self.text.get_height()
-        self.image.blit(
-            self.text, (50 - self.text_w / 2, 25 - self.text_h / 2))
+        # self.text = self.font.render(word, False, (0, 0, 0))
+        # self.text_w = self.text.get_width()
+        # self.text_h = self.text.get_height()
+        # self.image.blit(
+        #     self.text, (50 - self.text_w / 2, 25 - self.text_h / 2))
 
     # on click
     def update(self):
