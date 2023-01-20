@@ -1,7 +1,7 @@
 import socket
 from _thread import *
 
-HOST = "132.162.25.81"
+HOST = "100.115.92.204"
 PORT = 50012
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 # # This lets us reuse the same address without having to wait
