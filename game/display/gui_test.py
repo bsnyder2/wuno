@@ -19,7 +19,7 @@ class GUI():
         self.game = data.game.Game(valid_words, 4)
 
         # pygame setup
-        self.screen = pygame.display.set_mode((500, 500))
+        self.screen = pygame.display.set_mode((1300, 800))
         self.clock = pygame.time.Clock()
 
         # initialize cursor and buttons
@@ -41,7 +41,7 @@ class GUI():
 
         # assign buttons to cards in current hand
         for card_i, card in enumerate(self.game.current_hand.cards):
-            card.card_button = btns.CardButton(40 + card_i * 60, 450, card)
+            card.card_button = btns.CardButton(1300 / 2 - 125 / 2 + (len(self.game.current_hand.cards) - 2 * card_i) * 62.5, 800 - 175 / 2, card)
 
         # redraw buttons
         btns.Button.button_group.draw(self.screen)
