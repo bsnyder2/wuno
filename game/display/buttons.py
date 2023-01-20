@@ -86,6 +86,7 @@ class CardButton(Button):
         CardButton.card_group.add(self)
 
         self.card = card
+        self.letter = card.LETTER.lower()
 
         # letter
         # self.text = self.font.render(card.LETTER.upper(), False, (0, 0, 0))
@@ -94,7 +95,7 @@ class CardButton(Button):
         # self.image.blit(
         #     self.text, (25 - self.text_w / 2, 35 - self.text_h / 2))
 
-        self.image = pygame.image.load(sys.path[0] + "/display/flame pngs/A.png")
+        self.image = pygame.image.load(sys.path[0] + "/display/flame pngs/"+card.LETTER.upper()+".png")
 
     # on click
     def update(self):
