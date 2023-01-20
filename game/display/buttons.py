@@ -1,6 +1,33 @@
 import abc
 import pygame
-import sys
+import sys 
+
+Card_Imgs= {"a": pygame.image.load(sys.path[0] + "/display/flame pngs/A.png"),
+    "b": pygame.image.load(sys.path[0] + "/display/flame pngs/B.png"),
+    "c": pygame.image.load(sys.path[0] + "/display/flame pngs/C.png"),
+    "d": pygame.image.load(sys.path[0] + "/display/flame pngs/D.png"),
+    "e": pygame.image.load(sys.path[0] + "/display/flame pngs/E.png"),
+    "f": pygame.image.load(sys.path[0] + "/display/flame pngs/F.png"),
+    "g": pygame.image.load(sys.path[0] + "/display/flame pngs/G.png"),
+    "h": pygame.image.load(sys.path[0] + "/display/flame pngs/H.png"),
+    "i": pygame.image.load(sys.path[0] + "/display/flame pngs/I.png"),
+    "j": pygame.image.load(sys.path[0] + "/display/flame pngs/J.png"),
+    "k": pygame.image.load(sys.path[0] + "/display/flame pngs/K.png"),
+    "l": pygame.image.load(sys.path[0] + "/display/flame pngs/L.png"),
+    "m": pygame.image.load(sys.path[0] + "/display/flame pngs/M.png"),
+    "n": pygame.image.load(sys.path[0] + "/display/flame pngs/N.png"),
+    "o": pygame.image.load(sys.path[0] + "/display/flame pngs/O.png"),
+    "p": pygame.image.load(sys.path[0] + "/display/flame pngs/P.png"),
+    "q": pygame.image.load(sys.path[0] + "/display/flame pngs/Q.png"),
+    "r": pygame.image.load(sys.path[0] + "/display/flame pngs/R.png"),
+    "s": pygame.image.load(sys.path[0] + "/display/flame pngs/S.png"),
+    "t": pygame.image.load(sys.path[0] + "/display/flame pngs/T.png"),
+    "u": pygame.image.load(sys.path[0] + "/display/flame pngs/U.png"),
+    "v": pygame.image.load(sys.path[0] + "/display/flame pngs/V.png"),
+    "w": pygame.image.load(sys.path[0] + "/display/flame pngs/W.png"),
+    "x": pygame.image.load(sys.path[0] + "/display/flame pngs/X.png"),
+    "y": pygame.image.load(sys.path[0] + "/display/flame pngs/Y.png"),
+    "z": pygame.image.load(sys.path[0] + "/display/flame pngs/Z.png")}
 
 pygame.init()
 
@@ -37,7 +64,7 @@ class Button(pygame.sprite.Sprite, abc.ABC):
         # self.font = pygame.font.SysFont(None, int(height / 2))
 
         # image
-        self.image = pygame.image.load(sys.path[0] + "/display/flame pngs/A.png")
+        self.image = pygame.Surface((width, height))
         self.color = (255, 255, 255)
         #self.image.fill(self.color)
 
@@ -66,6 +93,8 @@ class CardButton(Button):
         # self.text_h = self.text.get_height()
         # self.image.blit(
         #     self.text, (25 - self.text_w / 2, 35 - self.text_h / 2))
+
+        self.image = pygame.image.load(sys.path[0] + "/display/flame pngs/A.png")
 
     # on click
     def update(self):
