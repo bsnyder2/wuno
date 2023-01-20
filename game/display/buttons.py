@@ -26,7 +26,7 @@ class Button(pygame.sprite.Sprite):
         Button.button_group.add(self)
 
         # common scaled font for all buttons
-        self.font = pygame.font.SysFont(None, width)
+        # self.font = pygame.font.SysFont(None, width)
 
         # image
         self.image = pygame.Surface((width, height))
@@ -59,22 +59,22 @@ class CardButton(Button):
         self.is_selected = False
 
         # letter
-        self.text = self.font.render(letter.upper(), False, (0, 0, 0))
-        self.text_w = self.text.get_width()
-        self.text_h = self.text.get_height()
-        self.image.blit(
-            self.text, (25 - self.text_w / 2, 35 - self.text_h / 2))
+        # self.text = self.font.render(letter.upper(), False, (0, 0, 0))
+        # self.text_w = self.text.get_width()
+        # self.text_h = self.text.get_height()
+        # self.image.blit(
+        #     self.text, (25 - self.text_w / 2, 35 - self.text_h / 2))
 
     def select(self):
         self.image.fill((0, 255, 0))
-        self.image.blit(
-            self.text, (25 - self.text_w / 2, 35 - self.text_h / 2))
+        # self.image.blit(
+        #     self.text, (25 - self.text_w / 2, 35 - self.text_h / 2))
         self.is_selected = True
 
     def deselect(self):
         self.image.fill(self.color)
-        self.image.blit(
-            self.text, (25 - self.text_w / 2, 35 - self.text_h / 2))
+        # self.image.blit(
+        #     self.text, (25 - self.text_w / 2, 35 - self.text_h / 2))
         self.is_selected = False
 
     # on click

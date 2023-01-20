@@ -70,9 +70,9 @@ def GUI(hands, nplayers = 1):
             innersurf.fill((255, 255, 255))
             card.image.blit(innersurf, (card.image.get_width() / 2 - innersurf.get_width() / 2, card.image.get_height() / 2 - innersurf.get_height() / 2))
 
-            font = pygame.font.SysFont(None, 175)
-            letter = font.render(hands[0][i], True, (255, 0, 0))
-            card.image.blit(letter, (card.image.get_width() / 2 - letter.get_width() / 2, card.image.get_height() / 2 - letter.get_height() / 2))
+            # font = pygame.font.SysFont(None, 175)
+            # letter = font.render(hands[0][i], True, (255, 0, 0))
+            # card.image.blit(letter, (card.image.get_width() / 2 - letter.get_width() / 2, card.image.get_height() / 2 - letter.get_height() / 2))
 
             if len(cardlist)-1 != confirmedcard:
                 card_center = (
