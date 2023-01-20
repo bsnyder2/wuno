@@ -1,5 +1,4 @@
 import random
-import display.display_hand
 
 
 LETTER_FREQS = {
@@ -34,6 +33,9 @@ LETTER_FREQS = {
 
 class Card:
     def __init__(self, letter):
+        # assigned a sprite by gui
+        self.card_button = None
+
         if letter.lower() not in LETTER_FREQS:
             raise ValueError("Invalid letter assigned to card")
         self.LETTER = letter.lower()
@@ -97,10 +99,6 @@ class Deck(CardList):
 
 
 class Hand(CardList):
-    def __init__(self):
-        self.cards = []
-        self.display_hand = display.display_hand.DisplayHand(self)
-
     def place(self, center, card):
         if card not in self.cards:
             raise ValueError(f"Card {card} not in hand")

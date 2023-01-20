@@ -1,50 +1,91 @@
 import sys
 import pygame
-from display.buttons import Cursor, Button, CardButton
+import data.game
+import display.buttons as btns
+
+pygame.init()
+
+# prints equivalent text info to gui
+debug = True
 
 
-class GUI:
-    def __init__(self, game):
-        self.game = game
+class GUI():
+    def __init__(self):
+        # creates a set of valid words from given file
+        file = open(sys.path[0] + "/wordsets/words-58k.txt", "r")
+        valid_words = {line.strip() for line in file}
 
+        # creates game with wordset valid_words and 4 players
+        self.game = data.game.Game(valid_words, 4)
 
-def main():
-    clock = pygame.time.Clock()
+        # pygame setup
+        self.screen = pygame.display.set_mode((500, 500))
+        self.clock = pygame.time.Clock()
 
-    # Set up the drawing window
-    screen = pygame.display.set_mode((500, 500))
+        # initialize cursor and buttons
+        btns.Cursor()
+        btns.ActionButton(420, 220, "Complete")
+        btns.ActionButton(420, 280, "Challenge")
 
-    # invisible mouse sprite group
-    Cursor()
+        # display all buttons
+        self.refresh_cards()
+        self.game_loop()
 
-    # buttons - adds to class group on creation
-    Button(50, 50, 100, 100)
-    CardButton(300, 300, "a")
-    CardButton(370, 350, "e")
-    CardButton(100, 200, "J")
+    def refresh_cards(self):
+        # kill all card sprites
+        for card_button in btns.CardButton.card_group:
+            pygame.sprite.Sprite.kill(card_button)
 
-    # initial draw buttons
-    Button.button_group.draw(screen)
+        # clear screen
+        self.screen.fill((0, 0, 0))
 
-    # True loop not necessary for final module, should be combined w GUI loop later on
-    while True:
-        # update cursor location
-        Cursor.cursor_group.update()
+        # assign buttons to cards in current hand
+        for card_i, card in enumerate(self.game.current_hand.cards):
+            card.card_button = btns.CardButton(40 + card_i * 60, 450, card)
 
-        # every frame, check:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            # if mouse clicked and button group hit, update and redraw button group
-            if event.type == pygame.MOUSEBUTTONDOWN and pygame.sprite.groupcollide(Cursor.cursor_group, Button.button_group, False, False):
-                Button.button_group.update()
-                Button.button_group.draw(screen)
+        # redraw buttons
+        btns.Button.button_group.draw(self.screen)
 
-        # update display at 60 fps
-        pygame.display.update()
-        clock.tick(60)
+        if debug:
+            print("\nCurrent word:", self.game.current_word)
+            print("Center:", self.game.center)
+            print("Current hand:", self.game.current_hand)
+            print(f"Discard pile: {self.game.discard}\n")
 
+    def game_loop(self):
+        while True:
+            # update cursor location
+            btns.Cursor.cursor_group.update()
 
-if __name__ == "__main__":
-    main()
+            # every frame, check:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+
+                # if mouse clicked and button group hit, update and redraw button group (for selection)
+                if event.type == pygame.MOUSEBUTTONDOWN and pygame.sprite.groupcollide(btns.Cursor.cursor_group, btns.Button.button_group, False, False):
+                    btns.Button.button_group.update()
+                    btns.Button.button_group.draw(self.screen)
+
+            # for all buttons:
+            for button in btns.Button.button_group:
+                # if confirmed card, place and refresh
+                if button.is_confirmed:
+                    if debug:
+                        print("CONFIRMED", button.card)
+                    self.game.place(button.card)
+                    self.refresh_cards()
+                    button.is_confirmed = False
+                # if pressed action button, do corresponding action and refresh
+                elif button.is_pressed:
+                    if button.word == "Complete":
+                        self.game.run_complete()
+                    else:
+                        self.game.run_challenge()
+                    self.refresh_cards()
+                    button.is_pressed = False
+
+            # update display at 60 fps
+            pygame.display.update()
+            self.clock.tick(60)
