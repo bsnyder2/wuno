@@ -5,7 +5,6 @@ pygame.init()
 
 
 class Cursor(pygame.sprite.Sprite):
-    # invisible mouse sprite class: there is only one of these objects for the whole game --> functions as our "clicker"
     cursor_group = pygame.sprite.GroupSingle()
 
     def __init__(self):
@@ -23,11 +22,15 @@ class Button(pygame.sprite.Sprite, abc.ABC):
     # abstract button superclass
     button_group = pygame.sprite.Group()
 
-    def __init__(self, gui, width, height, pos_x, pos_y):
+    def __init__(self, width, height, pos_x, pos_y):
         super().__init__()
         Button.button_group.add(self)
 
-        self.gui = gui
+        # button states
+        self.is_selected = False
+        self.is_confirmed = False
+        self.is_pressed = False
+        self.is_active = True
 
         # common scaled font for all buttons
         self.font = pygame.font.SysFont(None, int(height / 2))
@@ -41,8 +44,6 @@ class Button(pygame.sprite.Sprite, abc.ABC):
         self.rect = self.image.get_rect()
         self.rect.center = (pos_x, pos_y)
 
-        self.is_active = True
-
     # on click
     @abc.abstractmethod
     def update(self):
@@ -50,16 +51,13 @@ class Button(pygame.sprite.Sprite, abc.ABC):
 
 
 class CardButton(Button):
-    # CardButton should be attribute of Card?
     card_group = pygame.sprite.Group()
 
-    def __init__(self, gui, pos_x, pos_y, card):
-        super().__init__(gui, 50, 70, pos_x, pos_y)
+    def __init__(self, pos_x, pos_y, card):
+        super().__init__(50, 70, pos_x, pos_y)
         CardButton.card_group.add(self)
 
         self.card = card
-        self.is_selected = False
-        self.is_confirmed = False
 
         # letter
         self.text = self.font.render(card.LETTER.upper(), False, (0, 0, 0))
@@ -68,42 +66,34 @@ class CardButton(Button):
         self.image.blit(
             self.text, (25 - self.text_w / 2, 35 - self.text_h / 2))
 
-    def select(self):
-        self.image.fill((0, 255, 0))
-        self.image.blit(
-            self.text, (25 - self.text_w / 2, 35 - self.text_h / 2))
-        self.is_selected = True
-
-    def deselect(self):
-        self.image.fill(self.color)
-        self.image.blit(
-            self.text, (25 - self.text_w / 2, 35 - self.text_h / 2))
-        self.is_selected = False
-
     # on click
     def update(self):
-        # if clicked this button
         if pygame.sprite.collide_rect(Cursor.cursor_group.sprite, self) and self.is_active:
             if self.is_selected:
-                print("here")
                 self.is_confirmed = True
             else:
-                print(self.card)
-                print("SELECT")
+                # deselect all other cards
                 for card in CardButton.card_group:
-                    card.deselect()
-                self.select()
+                    card.redraw(self.color)
+                    card.is_selected = False
+                # select current card
+                self.redraw((0, 255, 0))
+                self.is_selected = True
+
+    def redraw(self, color):
+        self.image.fill(color)
+        self.image.blit(
+            self.text, (25 - self.text_w / 2, 35 - self.text_h / 2))
 
 
-class CompleteButton(Button):
-    complete_group = pygame.sprite.Group()
+class ActionButton(Button):
+    def __init__(self, pos_x, pos_y, word):
+        super().__init__(100, 50, pos_x, pos_y)
 
-    def __init__(self, gui, pos_x, pos_y):
-        super().__init__(gui, 100, 50, pos_x, pos_y)
-        CompleteButton.complete_group.add(self)
+        self.word = word
 
-        # letter
-        self.text = self.font.render("Complete", False, (0, 0, 0))
+        # word
+        self.text = self.font.render(word, False, (0, 0, 0))
         self.text_w = self.text.get_width()
         self.text_h = self.text.get_height()
         self.image.blit(
@@ -112,25 +102,4 @@ class CompleteButton(Button):
     # on click
     def update(self):
         if pygame.sprite.collide_rect(Cursor.cursor_group.sprite, self) and self.is_active:
-            self.gui.game.run_complete()
-
-
-class ChallengeButton(Button):
-    challenge_group = pygame.sprite.Group()
-
-    def __init__(self, gui, pos_x, pos_y):
-        super().__init__(gui, 100, 50, pos_x, pos_y)
-        CompleteButton.complete_group.add(self)
-    
-        # letter
-        self.text = self.font.render("Challenge", False, (0, 0, 0))
-        self.text_w = self.text.get_width()
-        self.text_h = self.text.get_height()
-        self.image.blit(
-            self.text, (50 - self.text_w / 2, 25 - self.text_h / 2))
-
-    # on click
-    def update(self):
-        if pygame.sprite.collide_rect(Cursor.cursor_group.sprite, self) and self.is_active:
-            self.gui.game.run_complete()
-
+            self.is_pressed = True

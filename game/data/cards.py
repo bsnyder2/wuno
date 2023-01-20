@@ -33,6 +33,7 @@ LETTER_FREQS = {
 
 class Card:
     def __init__(self, letter):
+        # assigned a sprite by gui
         self.card_button = None
 
         if letter.lower() not in LETTER_FREQS:
