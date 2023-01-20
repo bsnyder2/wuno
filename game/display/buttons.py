@@ -40,7 +40,7 @@ class Button(pygame.sprite.Sprite, abc.ABC):
         # image
         self.image = pygame.Surface((width, height))
         self.color = (255, 255, 255)
-        #self.image.fill(self.color)
+        self.image.fill(self.color)
 
         # rect
         self.rect = self.image.get_rect()
