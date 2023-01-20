@@ -56,7 +56,7 @@ class CardButton(Button):
     card_group = pygame.sprite.Group()
 
     def __init__(self, pos_x, pos_y, card):
-        super().__init__(50, 70, pos_x, pos_y)
+        super().__init__(125, 175, pos_x, pos_y)
         CardButton.card_group.add(self)
 
         self.card = card
