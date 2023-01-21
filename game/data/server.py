@@ -3,13 +3,14 @@ from _thread import *
 
 HOST = "100.115.92.204"
 PORT = 50012
+BACKLOG = 4 # Number of connections (players)
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 # # This lets us reuse the same address without having to wait
 sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) 
 
 try: 
     sock.bind((HOST, PORT))
-    sock.listen(4)
+    sock.listen(BACKLOG)
     print("Waiting for connection...connected")
 except socket.error as e:
     print(e)

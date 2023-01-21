@@ -11,7 +11,7 @@ class Network:
 
     def connect(self):
         try:
-            self.client.settimeout(10) # will wait 10 seconds for a connection; then it times out
+            self.client.settimeout(60) # will wait 60 seconds for a connection; then it times out
             self.client.connect(self.address)
             print(f"Connecting to: {self.address}")
             return self.client.recv(2048).decode("utf-8")
