@@ -1,7 +1,8 @@
 import socket
 from _thread import *
 
-HOST = "100.115.92.204"
+# HOST = "100.115.92.204"
+HOST = "10.17.3.65"
 PORT = 50012
 BACKLOG = 4 # Number of connections (players)
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
