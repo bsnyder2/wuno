@@ -2,6 +2,7 @@ import sys
 import pygame
 import data.game
 import display.buttons as btns
+import math
 
 pygame.init()
 
@@ -40,9 +41,15 @@ class GUI():
         self.screen.fill((0, 0, 0))
 
         # assign buttons to cards in current hand
-        for card_i, card in enumerate(self.game.current_hand.cards):
-            card.card_button = btns.CardButton(1300 / 2 - 125 / 2 + (len(self.game.current_hand.cards) - 2 * card_i) * 62.5, 800 - 175 / 2, card)
-
+        for hand_i in range(len(self.game.hands)):
+            for card_i, card in enumerate(self.game.hands[hand_i].cards):
+                card.card_button = btns.CardButton(650 - 125 / 2 + (len(self.game.current_hand.cards) - 2 * card_i) * 62.5,
+                800 * (((hand_i // 2) + 1) % 2) - 175 / 2 + 175  *(((hand_i // 2) + 2) % 2),
+                card)
+                # surf_center = (
+                #     (-40 - 10 * abs(- card_i + (len(hand_i) - 1) / 2) ** 1.7),
+                #     ((SCREEN_HEIGHT / 2 - card.image.get_height()) / 2 + (hands[2] - 1 - i) * 87.5)
+                # )
         # redraw buttons
         btns.Button.button_group.draw(self.screen)
 
