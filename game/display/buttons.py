@@ -3,6 +3,7 @@ import pygame
 import sys 
 
 
+
 pygame.init()
 
 
@@ -60,7 +61,7 @@ class CardButton(Button):
         CardButton.card_group.add(self)
 
         self.card = card
-        self.letter = card.LETTER.lower()
+        self.letter = card.LETTER.upper()
 
         # letter
         # self.text = self.font.render(card.LETTER.upper(), False, (0, 0, 0))
@@ -69,7 +70,7 @@ class CardButton(Button):
         # self.image.blit(
         #     self.text, (25 - self.text_w / 2, 35 - self.text_h / 2))
 
-        self.image = pygame.image.load(sys.path[0] + "/display/flame pngs/"+card.LETTER.upper()+".png")
+        self.image = pygame.image.load(sys.path[0] + "/display/flame pngs/"+self.letter+".png")
 
     # on click
     def update(self):
@@ -79,16 +80,36 @@ class CardButton(Button):
             else:
                 # deselect all other cards
                 for card in CardButton.card_group:
-                    card.redraw(self.color)
+                    card.redraw((0,255,0))
+                    card.reset()
                     card.is_selected = False
                 # select current card
-                self.redraw((0, 255, 0))
+                self.resize()
+                #self.redraw((0, 255, 0))
                 self.is_selected = True
 
     def redraw(self, color):
         self.image.fill(color)
+        #self.image = pygame.transform.scale(self.image, (150,210))
+        #self.image = pygame.image.load(sys.path[0] + "/display/flame pngs/"+self.letter+".png")
+    
+    def reset(self):
+        # self.image.fill((0,0,0))
+        # self.image = pygame.transform.scale(self.image, (150,210))
+        #self.image = pygame.transform.scale(self.image, (125,175))
+        self.image = pygame.image.load(sys.path[0] + "/display/flame pngs/"+self.letter+".png")
+        
+        
+        
         # self.image.blit(
         #     self.text, (25 - self.text_w / 2, 35 - self.text_h / 2))
+    
+    def resize(self):
+        self.image = pygame.image.load(sys.path[0] + "/display/flame pngs/"+self.letter+".png")
+        self.image = pygame.transform.scale(self.image, (150,210))
+        
+        #self.rect_center = (pos_x +10, pos_y +10)
+        
 
 
 class ActionButton(Button):
@@ -108,3 +129,4 @@ class ActionButton(Button):
     def update(self):
         if pygame.sprite.collide_rect(Cursor.cursor_group.sprite, self) and self.is_active:
             self.is_pressed = True
+
