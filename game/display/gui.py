@@ -2,7 +2,7 @@ import math
 import sys
 import pygame
 import data.game
-import display.buttons as btns
+import display.sprites as sprites
 
 pygame.init()
 
@@ -20,7 +20,7 @@ class DisplayHand():
     def assign_buttons(self):
         for card_i, card in enumerate(self.hand.cards):
             # initialize CardButton with default center (since rect needs to be reset)
-            card.card_button = btns.CardButton(card)
+            card.card_button = sprites.CardButton(card)
             # rotate image
             card.card_button.image = pygame.transform.rotate(
                 card.card_button.image, 90 - 180 * self.theta / math.pi)
@@ -65,9 +65,9 @@ class GUI():
         self.clock = pygame.time.Clock()
 
         # initialize cursor and buttons
-        btns.Cursor()
-        btns.ActionButton(420, 220, "Complete")
-        btns.ActionButton(420, 280, "Challenge")
+        sprites.Cursor()
+        sprites.ActionButton(420, 220, "Complete")
+        sprites.ActionButton(420, 280, "Challenge")
 
         self.display_hands = []
 
@@ -84,7 +84,7 @@ class GUI():
 
     def refresh_cards(self):
         # kill all buttons
-        for button in btns.CardButton.button_group:
+        for button in sprites.CardButton.button_group:
             pygame.sprite.Sprite.kill(button)
 
         # clear screen
@@ -95,7 +95,7 @@ class GUI():
             display_hand.assign_buttons()
 
         # redraw buttons
-        btns.Button.button_group.draw(self.screen)
+        sprites.Button.button_group.draw(self.screen)
 
         if debug:
             if self.game.current_word == "":
@@ -109,7 +109,7 @@ class GUI():
     def game_loop(self):
         while True:
             # update cursor location
-            btns.Cursor.cursor_group.update()
+            sprites.Cursor.cursor_group.update()
 
             # every frame, check:
             for event in pygame.event.get():
@@ -118,12 +118,12 @@ class GUI():
                     sys.exit()
 
                 # if mouse clicked and button group hit, update and redraw button group (for selection)
-                if event.type == pygame.MOUSEBUTTONDOWN and pygame.sprite.groupcollide(btns.Cursor.cursor_group, btns.Button.button_group, False, False):
-                    btns.Button.button_group.update()
-                    btns.Button.button_group.draw(self.screen)
+                if event.type == pygame.MOUSEBUTTONDOWN and pygame.sprite.groupcollide(sprites.Cursor.cursor_group, sprites.Button.button_group, False, False):
+                    sprites.Button.button_group.update()
+                    sprites.Button.button_group.draw(self.screen)
 
             # for all buttons:
-            for button in btns.Button.button_group:
+            for button in sprites.Button.button_group:
                 # if confirmed card, place and refresh
                 if button.is_confirmed:
                     if debug:
@@ -143,10 +143,3 @@ class GUI():
             # update display at 60 fps
             pygame.display.update()
             self.clock.tick(60)
-
-    def polar_to_cart(self, point):
-        # centered at (250, 250)
-        r, theta = point
-        x = int(r * math.cos(theta)) + 250
-        y = int(r * math.sin(theta)) + 250
-        return x, y
