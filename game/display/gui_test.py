@@ -3,6 +3,7 @@ import sys
 import pygame
 import data.game
 import display.buttons as btns
+import math
 
 pygame.init()
 
@@ -47,7 +48,7 @@ class GUI():
         self.game = data.game.Game(valid_words, 4)
 
         # pygame setup
-        self.screen = pygame.display.set_mode((500, 500))
+        self.screen = pygame.display.set_mode((1300, 800))
         self.clock = pygame.time.Clock()
 
         # initialize cursor and buttons

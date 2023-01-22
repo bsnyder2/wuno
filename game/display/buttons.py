@@ -103,3 +103,4 @@ class ActionButton(Button):
         if pygame.sprite.collide_rect(Cursor.cursor_group.sprite, self) and self.is_active:
             self.sound.play()
             self.is_pressed = True
+

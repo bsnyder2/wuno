@@ -3,7 +3,8 @@ import socket
 class Network:
     def __init__(self):
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.host = "132.162.25.81"
+        # self.host = "100.115.92.204"
+        self.host = "10.17.3.65"
         self.portNum = 50012
         self.address = (self.host, self.portNum)
         self.id = self.connect()
@@ -11,7 +12,7 @@ class Network:
 
     def connect(self):
         try:
-            self.client.settimeout(10) # will wait 10 seconds for a connection; then it times out
+            self.client.settimeout(60) # will wait 60 seconds for a connection; then it times out
             self.client.connect(self.address)
             print(f"Connecting to: {self.address}")
             return self.client.recv(2048).decode("utf-8")
