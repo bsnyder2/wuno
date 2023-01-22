@@ -66,8 +66,8 @@ class GUI():
 
         # initialize cursor and buttons
         sprites.Cursor()
-        sprites.ActionButton("Complete", 250, 220)
-        sprites.ActionButton("Challenge", 250, 280)
+        sprites.ActionButton("COMPLETE", 250, 220)
+        sprites.ActionButton("CHALLENGE", 250, 280)
 
         self.display_hands = []
 
@@ -143,7 +143,7 @@ class GUI():
                     button.check_selected = True
                 # if pressed action button, do corresponding action and refresh
                 elif button.is_pressed:
-                    if button.WORD == "Complete":
+                    if button.WORD == "COMPLETE":
                         self.game.run_complete()
                     else:
                         self.game.run_challenge()

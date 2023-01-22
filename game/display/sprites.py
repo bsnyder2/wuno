@@ -27,9 +27,6 @@ class Button(pygame.sprite.Sprite, abc.ABC):
         super().__init__()
         Button.button_group.add(self)
 
-        # common scaled font for all buttons
-        self.font = pygame.font.SysFont(None, int(height / 2))
-
         # button click sound
         self.sound = pygame.mixer.Sound(
             sys.path[0] + "/assets/sounds/button-click.wav")
@@ -49,7 +46,6 @@ class Button(pygame.sprite.Sprite, abc.ABC):
         self.rect.center = (pos_x, pos_y)
 
     # on click
-
     @abc.abstractmethod
     def update(self):
         pass
@@ -63,14 +59,20 @@ class CardButton(Button):
         CardButton.card_group.add(self)
 
         self.card = card
+        self.is_hidden = is_hidden
 
-        if is_hidden:
-            self.image = pygame.image.load(
-                sys.path[0] + "/assets/textures/test-letters/empty.png")
+        # image
+        self.image.fill((200, 200, 250))
+        font = pygame.font.Font(
+            sys.path[0] + "/assets/fonts/LEMONMILK-Regular.otf", 30)
+        self.text = font.render(card.LETTER.upper(), True, (0, 0, 0))
+        self.text_w = self.text.get_width()
+        self.text_h = self.text.get_height()
+        if self.is_hidden:
             self.is_active = False
         else:
-            self.image = pygame.image.load(
-                sys.path[0] + f"/assets/textures/test-letters/{card.LETTER.upper()}.png")
+            self.image.blit(
+                self.text, (25 - self.text_w / 2, 35 - self.text_h / 2))
 
     # on click
     def update(self):
@@ -80,16 +82,17 @@ class CardButton(Button):
                 self.is_confirmed = True
             else:
                 # deselect all other cards
-                for card in CardButton.card_group:
-                    # card.redraw()
-                    card.is_selected = False
+                for card_button in CardButton.card_group:
+                    if not card_button.is_hidden:
+                        card_button.image.fill((200, 200, 250))
+                        card_button.image.blit(
+                            card_button.text, (25 - card_button.text_w / 2, 35 - card_button.text_h / 2))
+                        card_button.is_selected = False
                 # select current card
-                # self.redraw()
+                self.image.fill((100, 200, 250))
+                self.image.blit(
+                    self.text, (25 - self.text_w / 2, 35 - self.text_h / 2))
                 self.is_selected = True
-
-    # def redraw(self):
-
-        
 
 
 class ActionButton(Button):
@@ -97,10 +100,12 @@ class ActionButton(Button):
         super().__init__(100, 50, pos_x, pos_y)
 
         self.WORD = word
-        self.image.fill((255, 255, 255))
 
         # word
-        self.text = self.font.render(self.WORD, False, (0, 0, 0))
+        self.image.fill((255, 255, 255))
+        font = pygame.font.Font(
+            sys.path[0] + "/assets/fonts/LEMONMILK-Regular.otf", 15)
+        self.text = font.render(self.WORD, True, (0, 0, 0))
         self.text_w = self.text.get_width()
         self.text_h = self.text.get_height()
         self.image.blit(
