@@ -17,10 +17,10 @@ class DisplayHand():
         self.theta = (math.pi / 2) + (2 * position * math.pi / 4)
         self.hand_center = self.polar_to_cart((200, self.theta))
 
-    def assign_buttons(self):
+    def assign_buttons(self, is_current):
         for card_i, card in enumerate(self.hand.cards):
             # initialize CardButton with default center (since rect needs to be reset)
-            card.card_button = sprites.CardButton(card)
+            card.card_button = sprites.CardButton(card, not is_current)
             # rotate image
             card.card_button.image = pygame.transform.rotate(
                 card.card_button.image, 90 - 180 * self.theta / math.pi)
@@ -30,11 +30,11 @@ class DisplayHand():
             # set rect center based on hand position and n cards in hand
             inter_dist = 60
 
-            if len(self.hand.cards) >= 5:
-                inter_dist -= (len(self.hand.cards) - 5) * inter_dist / 2
+            # compress cards if too many
+            # if len(self.hand.cards) > 5:
+                # inter_dist /= (len(self.hand.cards) - 6)
 
             offset = (len(self.hand.cards) - 1) * inter_dist / 2
-                
 
             if self.position % 2 == 0:
                 card.card_button.rect.center = (
@@ -57,7 +57,7 @@ class GUI():
         file = open(sys.path[0] + "/assets/wordsets/words-58k.txt", "r")
         valid_words = {line.strip() for line in file}
 
-        # creates game with wordset valid_words and 4 players
+        # creates game with wordset valid_words and n players
         self.game = data.game.Game(valid_words, 4)
 
         # pygame setup
@@ -66,16 +66,20 @@ class GUI():
 
         # initialize cursor and buttons
         sprites.Cursor()
-        sprites.ActionButton(420, 220, "Complete")
-        sprites.ActionButton(420, 280, "Challenge")
+        sprites.ActionButton("Complete", 250, 220)
+        sprites.ActionButton("Challenge", 250, 280)
 
         self.display_hands = []
 
-        if self.game.N_PLAYERS >= 2:
+        # 2 players: across
+        if self.game.N_PLAYERS == 2:
             self.display_hands.append(DisplayHand(self.game.hands[0], 0))
             self.display_hands.append(DisplayHand(self.game.hands[1], 2))
-        if self.game.N_PLAYERS >= 3:
-            self.display_hands.append(DisplayHand(self.game.hands[2], 1))
+        # 3 or 4 players: all spots
+        elif self.game.N_PLAYERS >= 3:
+            self.display_hands.append(DisplayHand(self.game.hands[0], 0))
+            self.display_hands.append(DisplayHand(self.game.hands[1], 1))
+            self.display_hands.append(DisplayHand(self.game.hands[2], 2))
         if self.game.N_PLAYERS == 4:
             self.display_hands.append(DisplayHand(self.game.hands[3], 3))
         # display all buttons
@@ -83,16 +87,17 @@ class GUI():
         self.game_loop()
 
     def refresh_cards(self):
-        # kill all buttons
-        for button in sprites.CardButton.button_group:
-            pygame.sprite.Sprite.kill(button)
+        # kill all CardButtons
+        for card in sprites.CardButton.card_group:
+            pygame.sprite.Sprite.kill(card)
 
         # clear screen
         self.screen.fill((0, 0, 0))
 
         # assign buttons to cards in current hand
         for display_hand in self.display_hands:
-            display_hand.assign_buttons()
+            is_current = display_hand.hand == self.game.current_hand
+            display_hand.assign_buttons(is_current)
 
         # redraw buttons
         sprites.Button.button_group.draw(self.screen)
@@ -124,6 +129,10 @@ class GUI():
 
             # for all buttons:
             for button in sprites.Button.button_group:
+                if button.is_selected and button.check_selected:
+                    if debug:
+                        print("SELECTED", button.card)
+                    button.check_selected = False
                 # if confirmed card, place and refresh
                 if button.is_confirmed:
                     if debug:
@@ -131,6 +140,7 @@ class GUI():
                     self.game.place(button.card)
                     self.refresh_cards()
                     button.is_confirmed = False
+                    button.check_selected = True
                 # if pressed action button, do corresponding action and refresh
                 elif button.is_pressed:
                     if button.WORD == "Complete":

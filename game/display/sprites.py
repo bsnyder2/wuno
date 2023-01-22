@@ -36,6 +36,7 @@ class Button(pygame.sprite.Sprite, abc.ABC):
 
         # button states
         self.is_selected = False
+        self.check_selected = True
         self.is_confirmed = False
         self.is_pressed = False
         self.is_active = True
@@ -57,13 +58,19 @@ class Button(pygame.sprite.Sprite, abc.ABC):
 class CardButton(Button):
     card_group = pygame.sprite.Group()
 
-    def __init__(self, card, pos_x=0, pos_y=0):
+    def __init__(self, card, is_hidden, pos_x=0, pos_y=0):
         super().__init__(50, 70, pos_x, pos_y)
         CardButton.card_group.add(self)
 
         self.card = card
-        self.image = pygame.image.load(
-            sys.path[0] + f"/assets/textures/test-letters/{card.LETTER.upper()}.png")
+
+        if is_hidden:
+            self.image = pygame.image.load(
+                sys.path[0] + "/assets/textures/test-letters/empty.png")
+            self.is_active = False
+        else:
+            self.image = pygame.image.load(
+                sys.path[0] + f"/assets/textures/test-letters/{card.LETTER.upper()}.png")
 
     # on click
     def update(self):
@@ -74,21 +81,23 @@ class CardButton(Button):
             else:
                 # deselect all other cards
                 for card in CardButton.card_group:
-                    card.redraw()
+                    # card.redraw()
                     card.is_selected = False
                 # select current card
-                self.redraw()
+                # self.redraw()
                 self.is_selected = True
 
-    def redraw(self):
-        pass
+    # def redraw(self):
+
+        
 
 
 class ActionButton(Button):
-    def __init__(self, pos_x, pos_y, word):
+    def __init__(self, word, pos_x, pos_y):
         super().__init__(100, 50, pos_x, pos_y)
 
         self.WORD = word
+        self.image.fill((255, 255, 255))
 
         # word
         self.text = self.font.render(self.WORD, False, (0, 0, 0))
