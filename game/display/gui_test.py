@@ -3,7 +3,6 @@ import sys
 import pygame
 import data.game
 import display.buttons as btns
-import math
 
 pygame.init()
 
