@@ -1,4 +1,3 @@
-import random
 import data.cards
 import data.word_trie
 
@@ -19,7 +18,7 @@ class Game:
         self.hands = [data.cards.Hand() for i in range(n_players)]
 
         # game status
-        self.current_index = random.randrange(n_players)
+        self.current_index = 0
         self.current_hand = self.hands[self.current_index]
         self.current_word = ""
 
@@ -34,6 +33,7 @@ class Game:
     def place(self, pl_card):
         self.current_hand.place(self.center, pl_card)
         self.current_word += pl_card.LETTER
+        self.hand_forward()
 
     def run_complete(self):
         if len(self.current_word) > 2 and self.current_word in self.VALID_WORDS:
@@ -45,7 +45,7 @@ class Game:
         else:
             print("Word is incomplete: current player draws 2")
             self.draw_n(self.current_hand, 2)
-        # self.hand_forward()
+        self.hand_forward()
 
     def run_challenge(self):
         if len(self.tr.continuant_letters(self.current_word)) < 1:
@@ -55,7 +55,7 @@ class Game:
             print("Word is continuable: current player takes center")
             self.center.move_all(self.current_hand)
         self.current_word = ""
-        # self.hand_forward()
+        self.hand_forward()
 
     def draw_n(self, hand, n):
         for i in range(n):

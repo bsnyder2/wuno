@@ -1,3 +1,3 @@
-import display.gui_test
+import display.gui
 
-display.gui_test.GUI()
+display.gui.GUI()
