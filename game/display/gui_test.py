@@ -83,7 +83,7 @@ class GUI():
                         print("CONFIRMED", button.card)
                     self.game.place(button.card)
                     self.refresh_cards()
-                    button.is_confirmed = False
+                    
                 # if pressed action button, do corresponding action and refresh
                 elif button.is_pressed:
                     if button.word == "Complete":
