@@ -31,8 +31,8 @@ class DisplayHand():
             inter_dist = 60
 
             # compress cards if too many
-            # if len(self.hand.cards) > 5:
-                # inter_dist /= (len(self.hand.cards) - 6)
+            if len(self.hand.cards) > 5:
+                inter_dist = 240 / (len(self.hand.cards) - 1)
 
             offset = (len(self.hand.cards) - 1) * inter_dist / 2
 
@@ -66,8 +66,9 @@ class GUI():
 
         # initialize cursor and buttons
         sprites.Cursor()
-        sprites.ActionButton("COMPLETE", 250, 220)
-        sprites.ActionButton("CHALLENGE", 250, 280)
+        sprites.ActionButton("COMPLETE", 310, 280)
+        sprites.ActionButton("CHALLENGE", 310, 340)
+        sprites.DeckButton(190, 310)
 
         self.display_hands = []
 
@@ -129,10 +130,6 @@ class GUI():
 
             # for all buttons:
             for button in sprites.Button.button_group:
-                if button.is_selected and button.check_selected:
-                    if debug:
-                        print("SELECTED", button.card)
-                    button.check_selected = False
                 # if confirmed card, place and refresh
                 if button.is_confirmed:
                     if debug:
@@ -140,10 +137,13 @@ class GUI():
                     self.game.place(button.card)
                     self.refresh_cards()
                     button.is_confirmed = False
-                    button.check_selected = True
                 # if pressed action button, do corresponding action and refresh
                 elif button.is_pressed:
-                    if button.WORD == "COMPLETE":
+                    if isinstance(button, sprites.DeckButton):
+                        if debug:
+                            print("DREW CARD")
+                        self.game.draw_n(self.game.current_hand, 1)
+                    elif button.WORD == "COMPLETE":
                         self.game.run_complete()
                     else:
                         self.game.run_challenge()
