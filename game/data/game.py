@@ -1,4 +1,3 @@
-import random
 import data.cards
 import data.word_trie
 
@@ -19,7 +18,7 @@ class Game:
         self.hands = [data.cards.Hand() for i in range(n_players)]
 
         # game status
-        self.current_index = random.randrange(n_players)
+        self.current_index = 0
         self.current_hand = self.hands[self.current_index]
         self.current_word = ""
 

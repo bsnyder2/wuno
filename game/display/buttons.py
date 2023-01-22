@@ -33,7 +33,7 @@ class Button(pygame.sprite.Sprite, abc.ABC):
 
         # button click sound
         self.sound = pygame.mixer.Sound(
-            sys.path[0] + "/sounds/button_click.wav")
+            sys.path[0] + "/assets/sounds/button-click.wav")
 
         # button states
         self.is_selected = False
@@ -64,7 +64,7 @@ class CardButton(Button):
 
         self.card = card
         self.image = pygame.image.load(
-            sys.path[0] + f"/display/flame pngs/{card.LETTER.upper()}_1.png")
+            sys.path[0] + f"/assets/textures/test-letters/{card.LETTER.upper()}.png")
 
     # on click
     def update(self):
@@ -89,10 +89,10 @@ class ActionButton(Button):
     def __init__(self, pos_x, pos_y, word):
         super().__init__(100, 50, pos_x, pos_y)
 
-        self.word = word
+        self.WORD = word
 
         # word
-        self.text = self.font.render(word, False, (0, 0, 0))
+        self.text = self.font.render(self.WORD, False, (0, 0, 0))
         self.text_w = self.text.get_width()
         self.text_h = self.text.get_height()
         self.image.blit(
@@ -103,4 +103,3 @@ class ActionButton(Button):
         if pygame.sprite.collide_rect(Cursor.cursor_group.sprite, self) and self.is_active:
             self.sound.play()
             self.is_pressed = True
-
