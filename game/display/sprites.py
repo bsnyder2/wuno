@@ -28,7 +28,7 @@ class Button(pygame.sprite.Sprite, abc.ABC):
         Button.button_group.add(self)
 
         # common scaled font for all buttons
-        # self.font = pygame.font.SysFont(None, int(height / 2))
+        self.font = pygame.font.SysFont(None, int(height / 2))
 
         # button click sound
         self.sound = pygame.mixer.Sound(
@@ -36,7 +36,6 @@ class Button(pygame.sprite.Sprite, abc.ABC):
 
         # button states
         self.is_selected = False
-        self.check_selected = True
         self.is_confirmed = False
         self.is_pressed = False
         self.is_active = True
@@ -49,7 +48,6 @@ class Button(pygame.sprite.Sprite, abc.ABC):
         self.rect.center = (pos_x, pos_y)
 
     # on click
-
     @abc.abstractmethod
     def update(self):
         pass
@@ -63,14 +61,23 @@ class CardButton(Button):
         CardButton.card_group.add(self)
 
         self.card = card
+        self.is_hidden = is_hidden
 
-        if is_hidden:
-            self.image = pygame.image.load(
-                sys.path[0] + "/assets/textures/test-letters/empty.png")
+        # image
+        self.image.fill((160, 200, 240))
+        pygame.draw.rect(self.image, (0, 0, 0), (0, 0, 50, 70), 2)
+
+        font = pygame.font.Font(
+            sys.path[0] + "/assets/fonts/LEMONMILK-Regular.otf", 30)
+        self.text = font.render(card.LETTER.upper(), True, (0, 0, 0))
+        self.text_w = self.text.get_width()
+        self.text_h = self.text.get_height()
+        # draw text if card is not hidden
+        if self.is_hidden:
             self.is_active = False
         else:
-            self.image = pygame.image.load(
-                sys.path[0] + f"/assets/textures/test-letters/{card.LETTER.upper()}.png")
+            self.image.blit(
+                self.text, (25 - self.text_w / 2, 35 - self.text_h / 2))
 
     # on click
     def update(self):
@@ -81,50 +88,46 @@ class CardButton(Button):
             else:
                 # deselect all other cards
                 for card in CardButton.card_group:
-                    #card.resize()
+                    # card.redraw()
                     card.is_selected = False
                 # select current card
-                #self.resize(True)
+                # self.redraw()
                 self.is_selected = True
 
-    def resize(self, increase=False):
-        width = self.image.get_width()
-        height = self.image.get_height()
-        self.copy = self.image
-        if increase:
-            if (width,height) == (50,70):
-                self.image = pygame.transform.scale(self.copy, (60,84))
-            else:
-                self.image = pygame.transform.scale(self.copy, (84,60))
-        if not increase:
-            if (width,height) == (50,70) or (width, height) == (60,84):
-                self.image = pygame.transform.scale(self.copy, (50,70))
-            else:
-                self.image = pygame.transform.scale(self.copy, (70,50))
-
-    def dull(self):
-        self.image.get_at()
+    # def redraw(self):
 
         
-
-        
-
 
 class ActionButton(Button):
     def __init__(self, word, pos_x, pos_y):
         super().__init__(100, 50, pos_x, pos_y)
 
         self.WORD = word
+
+        # image
         self.image.fill((255, 255, 255))
 
         # word
-        # self.text = self.font.render(self.WORD, False, (0, 0, 0))
-        # self.text_w = self.text.get_width()
-        # self.text_h = self.text.get_height()
-        # self.image.blit(
-        #     self.text, (50 - self.text_w / 2, 25 - self.text_h / 2))
+        self.text = self.font.render(self.WORD, False, (0, 0, 0))
+        self.text_w = self.text.get_width()
+        self.text_h = self.text.get_height()
+        self.image.blit(
+            self.text, (50 - self.text_w / 2, 25 - self.text_h / 2))
 
     # on click
+    def update(self):
+        if pygame.sprite.collide_rect(Cursor.cursor_group.sprite, self) and self.is_active:
+            self.sound.play()
+            self.is_pressed = True
+
+
+class DeckButton(Button):
+    def __init__(self, pos_x, pos_y):
+        super().__init__(50, 70, pos_x, pos_y)
+
+        # image
+        self.image.fill((160, 200, 240))
+
     def update(self):
         if pygame.sprite.collide_rect(Cursor.cursor_group.sprite, self) and self.is_active:
             self.sound.play()
