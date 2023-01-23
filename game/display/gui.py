@@ -64,6 +64,7 @@ class DisplayCenter:
 
             card.card_button = sprites.CardButton(
                 card, False, 250 + card_i * inter_dist - offset, 190)
+            card.card_button.is_active = False
 
 
 class GUI:
