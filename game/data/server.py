@@ -1,6 +1,6 @@
 import socket
 import _thread
-
+# import pickle
 
 class Server:
     def __init__(self, host_ip, port):
@@ -28,6 +28,14 @@ class Server:
 
     def connection(self, conn, addr, n):
         conn.send(str.encode("Connected to server"))
+        # Sending objects with pickle:
+        # pickledData = pickle.dumps(object)
+        # conn.send(pickledData)
+
+        # Receiving objects with pickle:
+        # unpickledData = pickle.loads(object)
+        # conn.recv(unpickledData)
+
         while True:
             # receive data from client
             data = conn.recv(2048)
