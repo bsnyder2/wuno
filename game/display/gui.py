@@ -10,7 +10,7 @@ pygame.init()
 debug = True
 
 
-class DisplayHand():
+class DisplayHand:
     def __init__(self, hand, position):
         self.hand = hand
         self.position = position
@@ -20,6 +20,7 @@ class DisplayHand():
     def assign_buttons(self, is_current):
         for card_i, card in enumerate(self.hand.cards):
             # initialize CardButton with default center (since rect needs to be reset)
+            # hidden if not current hand
             card.card_button = sprites.CardButton(card, not is_current)
             # rotate image
             card.card_button.image = pygame.transform.rotate(
@@ -29,11 +30,10 @@ class DisplayHand():
 
             # set rect center based on hand position and n cards in hand
             inter_dist = 60
-
             # compress cards if too many
             if len(self.hand.cards) > 5:
                 inter_dist = 240 / (len(self.hand.cards) - 1)
-
+            
             offset = (len(self.hand.cards) - 1) * inter_dist / 2
 
             if self.position % 2 == 0:
@@ -51,7 +51,20 @@ class DisplayHand():
         return x, y
 
 
-class GUI():
+class DisplayCenter:
+    def __init__(self, center):
+        self.center = center
+
+    def assign_buttons(self):
+        for card_i, card in enumerate(self.center.cards):
+            inter_dist = 60
+            offset = (len(self.center.cards) - 1) * inter_dist / 2
+
+            card.card_button = sprites.CardButton(
+                card, False, 250 + card_i * inter_dist - offset, 190)
+
+
+class GUI:
     def __init__(self):
         # creates a set of valid words from given file
         file = open(sys.path[0] + "/assets/wordsets/words-58k.txt", "r")
@@ -71,7 +84,6 @@ class GUI():
         sprites.DeckButton(190, 310)
 
         self.display_hands = []
-
         # 2 players: across
         if self.game.N_PLAYERS == 2:
             self.display_hands.append(DisplayHand(self.game.hands[0], 0))
@@ -83,6 +95,10 @@ class GUI():
             self.display_hands.append(DisplayHand(self.game.hands[2], 2))
         if self.game.N_PLAYERS == 4:
             self.display_hands.append(DisplayHand(self.game.hands[3], 3))
+
+        self.display_center = DisplayCenter(self.game.center)
+        # print(self.display_center.center.cards[0])
+
         # display all buttons
         self.refresh_cards()
         self.game_loop()
@@ -99,6 +115,7 @@ class GUI():
         for display_hand in self.display_hands:
             is_current = display_hand.hand == self.game.current_hand
             display_hand.assign_buttons(is_current)
+        self.display_center.assign_buttons()
 
         # redraw buttons
         sprites.Button.button_group.draw(self.screen)

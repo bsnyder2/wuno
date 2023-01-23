@@ -67,6 +67,7 @@ class CardButton(Button):
         self.text = font.render(card.LETTER.upper(), True, (0, 0, 0))
         self.text_w = self.text.get_width()
         self.text_h = self.text.get_height()
+        # draw text if card is not hidden
         if self.is_hidden:
             self.is_active = False
         else:
