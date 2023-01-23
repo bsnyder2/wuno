@@ -27,6 +27,9 @@ class Button(pygame.sprite.Sprite, abc.ABC):
         super().__init__()
         Button.button_group.add(self)
 
+        # common scaled font for all buttons
+        self.font = pygame.font.SysFont(None, int(height / 2))
+
         # button click sound
         self.sound = pygame.mixer.Sound(
             sys.path[0] + "/assets/sounds/button-click.wav")
@@ -84,20 +87,16 @@ class CardButton(Button):
                 self.is_confirmed = True
             else:
                 # deselect all other cards
-                for card_button in CardButton.card_group:
-                    if not card_button.is_hidden:
-                        card_button.image.fill((160, 200, 240))
-                        pygame.draw.rect(card_button.image, (0, 0, 0), (0, 0, 50, 70), 2)
-                        card_button.image.blit(
-                            card_button.text, (25 - card_button.text_w / 2, 35 - card_button.text_h / 2))
-                        card_button.is_selected = False
+                for card in CardButton.card_group:
+                    # card.redraw()
+                    card.is_selected = False
                 # select current card
-                self.image.fill((110, 150, 190))
-                pygame.draw.rect(self.image, (0, 0, 0), (0, 0, 50, 70), 2)
-                self.image.blit(
-                    self.text, (25 - self.text_w / 2, 35 - self.text_h / 2))
+                # self.redraw()
                 self.is_selected = True
 
+    # def redraw(self):
+
+        
 
 class ActionButton(Button):
     def __init__(self, word, pos_x, pos_y):
@@ -107,9 +106,9 @@ class ActionButton(Button):
 
         # image
         self.image.fill((255, 255, 255))
-        font = pygame.font.Font(
-            sys.path[0] + "/assets/fonts/LEMONMILK-Regular.otf", 15)
-        self.text = font.render(self.WORD, True, (0, 0, 0))
+
+        # word
+        self.text = self.font.render(self.WORD, False, (0, 0, 0))
         self.text_w = self.text.get_width()
         self.text_h = self.text.get_height()
         self.image.blit(
