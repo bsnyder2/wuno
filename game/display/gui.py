@@ -36,6 +36,10 @@ class DisplayHand:
             
             offset = (len(self.hand.cards) - 1) * inter_dist / 2
 
+            if self.position > 1:
+                card_i = -card_i
+                offset = -offset
+
             if self.position % 2 == 0:
                 card.card_button.rect.center = (
                     self.hand_center[0] + card_i * inter_dist - offset, self.hand_center[1])
