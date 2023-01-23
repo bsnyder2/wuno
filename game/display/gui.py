@@ -148,10 +148,17 @@ class GUI:
                     sprites.Button.button_group.update()
                     sprites.Button.button_group.draw(self.screen)
 
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_RETURN:
+                        if self.game.card_placed == True:
+                            self.game.hand_forward()
+                            self.refresh_cards()
+                            self.game.card_placed = False
+
             # for all buttons:
             for button in sprites.Button.button_group:
                 # if confirmed card, place and refresh
-                if button.is_confirmed:
+                if button.is_confirmed and self.game.card_placed == False:
                     if debug:
                         print("CONFIRMED", button.card)
                     self.game.place(button.card)
@@ -165,7 +172,7 @@ class GUI:
                         self.game.draw_n(self.game.current_hand, 1)
                     elif button.WORD == "COMPLETE":
                         self.game.run_complete()
-                    else:
+                    elif self.game.card_placed == False:
                         self.game.run_challenge()
                     self.refresh_cards()
                     button.is_pressed = False
