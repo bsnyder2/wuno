@@ -3,15 +3,15 @@ import _thread
 
 
 class Server:
-    def __init__(self):
+    def __init__(self, host_ip, port):
         # ObieWiFi
-        self.IP = "10.17.50.224"
-        self.PORT = 50000
+        self.HOST_IP = host_ip
+        self.PORT = port
         # IPv4
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     def start(self):
-        self.s.bind((self.IP, self.PORT))
+        self.s.bind((self.HOST_IP, self.PORT))
         # accepts maximum of 4 connections
         self.s.listen(4)
         print("Server started")
@@ -38,7 +38,3 @@ class Server:
             # send received data to all clients
             conn.sendall(str.encode(msg))
             print(f"Sent \"{msg}\" to all clients")
-
-
-sv = Server()
-sv.start()

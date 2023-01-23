@@ -2,15 +2,15 @@ import socket
 
 
 class Client:
-    def __init__(self):
+    def __init__(self, host_ip, port):
         # ObieWiFi
-        self.IP = "10.17.50.224"
-        self.PORT = 50000
+        self.HOST_IP = host_ip
+        self.PORT = port
         # IPv4
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     def connect(self):
-        self.s.connect((self.IP, self.PORT))
+        self.s.connect((self.HOST_IP, self.PORT))
         connect_msg = self.s.recv(2048).decode()
         print(connect_msg)
 
@@ -22,8 +22,3 @@ class Client:
         # receive data from server
         msg = self.s.recv(2048).decode()
         print(f"Received \"{msg}\"")
-
-
-c = Client()
-c.connect()
-c.send(input("Enter message: "))
