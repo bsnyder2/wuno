@@ -1,11 +1,9 @@
 import data.client
-import data.server
 import display.gui
 
-display.gui.GUI()
 
 def main():
-    HOST_IP = "10.17.61.187"
+    HOST_IP = "10.17.50.224"
     PORT = 50000
 
     # start client
@@ -13,7 +11,8 @@ def main():
     c.connect()
 
     c.send("hello")
+    display.gui.GUI()
 
 
-# if __name__ == "__main__":
-#     main()
+if __name__ == "__main__":
+    main()

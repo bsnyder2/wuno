@@ -75,6 +75,7 @@ class GUI:
 
         # creates game with wordset valid_words and n players
         self.game = data.game.Game(valid_words, 4)
+        
         # pygame setup
         self.screen = pygame.display.set_mode((500, 500))
         self.clock = pygame.time.Clock()
