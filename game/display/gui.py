@@ -28,18 +28,16 @@ class DisplayHand:
             # set rect dimensions to image
             card.card_button.rect = card.card_button.image.get_rect()
 
-            # set rect center based on hand position and n cards in hand
-            inter_dist = 60
             # compress cards if too many
+            inter_dist = 60
             if len(self.hand.cards) > 5:
                 inter_dist = 240 / (len(self.hand.cards) - 1)
-            
-            offset = (len(self.hand.cards) - 1) * inter_dist / 2
 
+            # set card centers accordingly
+            offset = (len(self.hand.cards) - 1) * inter_dist / 2
             if self.position > 1:
                 card_i = -card_i
                 offset = -offset
-
             if self.position % 2 == 0:
                 card.card_button.rect.center = (
                     self.hand_center[0] + card_i * inter_dist - offset, self.hand_center[1])

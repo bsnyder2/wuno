@@ -62,6 +62,8 @@ class CardButton(Button):
 
         # image
         self.image.fill((160, 200, 240))
+        pygame.draw.rect(self.image, (0, 0, 0), (0, 0, 50, 70), 2)
+
         font = pygame.font.Font(
             sys.path[0] + "/assets/fonts/LEMONMILK-Regular.otf", 30)
         self.text = font.render(card.LETTER.upper(), True, (0, 0, 0))
@@ -85,11 +87,13 @@ class CardButton(Button):
                 for card_button in CardButton.card_group:
                     if not card_button.is_hidden:
                         card_button.image.fill((160, 200, 240))
+                        pygame.draw.rect(card_button.image, (0, 0, 0), (0, 0, 50, 70), 2)
                         card_button.image.blit(
                             card_button.text, (25 - card_button.text_w / 2, 35 - card_button.text_h / 2))
                         card_button.is_selected = False
                 # select current card
                 self.image.fill((110, 150, 190))
+                pygame.draw.rect(self.image, (0, 0, 0), (0, 0, 50, 70), 2)
                 self.image.blit(
                     self.text, (25 - self.text_w / 2, 35 - self.text_h / 2))
                 self.is_selected = True
