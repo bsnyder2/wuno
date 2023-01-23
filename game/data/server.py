@@ -17,13 +17,16 @@ class Server:
         print("Server started")
 
         # loops to accept new connections
+        n = 0
         while True:
             conn, addr = self.s.accept()
             # creates thread with new connection
-            _thread.start_new_thread(self.connection, (conn, addr))
-            print(addr, "connected")
+            _thread.start_new_thread(self.connection, (conn, addr, n))
+            print(addr, f"connected (Player {n})")
+            n += 1
+            
 
-    def connection(self, conn, addr):
+    def connection(self, conn, addr, n):
         conn.send(str.encode("Connected to server"))
         while True:
             # receive data from client
