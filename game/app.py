@@ -2,7 +2,7 @@ import data.client
 import data.server
 import display.gui
 
-# display.gui.GUI()
+display.gui.GUI()
 
 def main():
     HOST_IP = "10.17.50.224"

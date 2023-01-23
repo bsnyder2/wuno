@@ -8,6 +8,7 @@ class Game:
         self.VALID_WORDS = valid_words
         self.N_PLAYERS = n_players
         self.tr = data.word_trie.WordTrie()
+        self.card_placed = False
         for word in self.VALID_WORDS:
             self.tr.insert(word)
 
@@ -33,7 +34,7 @@ class Game:
     def place(self, pl_card):
         self.current_hand.place(self.center, pl_card)
         self.current_word += pl_card.LETTER
-        self.hand_forward()
+        self.card_placed = True
 
     def run_complete(self):
         if len(self.current_word) > 2 and self.current_word in self.VALID_WORDS:
@@ -74,3 +75,4 @@ class Game:
         if self.current_index > self.N_PLAYERS - 1:
             self.current_index = 0
         self.current_hand = self.hands[self.current_index]
+        self.card_placed = False
