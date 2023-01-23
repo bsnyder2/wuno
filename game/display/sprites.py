@@ -28,7 +28,7 @@ class Button(pygame.sprite.Sprite, abc.ABC):
         Button.button_group.add(self)
 
         # common scaled font for all buttons
-        self.font = pygame.font.SysFont(None, int(height / 2))
+        # self.font = pygame.font.SysFont(None, int(height / 2))
 
         # button click sound
         self.sound = pygame.mixer.Sound(
@@ -81,13 +81,31 @@ class CardButton(Button):
             else:
                 # deselect all other cards
                 for card in CardButton.card_group:
-                    # card.redraw()
+                    #card.resize()
                     card.is_selected = False
                 # select current card
-                # self.redraw()
+                #self.resize(True)
                 self.is_selected = True
 
-    # def redraw(self):
+    def resize(self, increase=False):
+        width = self.image.get_width()
+        height = self.image.get_height()
+        self.copy = self.image
+        if increase:
+            if (width,height) == (50,70):
+                self.image = pygame.transform.scale(self.copy, (60,84))
+            else:
+                self.image = pygame.transform.scale(self.copy, (84,60))
+        if not increase:
+            if (width,height) == (50,70) or (width, height) == (60,84):
+                self.image = pygame.transform.scale(self.copy, (50,70))
+            else:
+                self.image = pygame.transform.scale(self.copy, (70,50))
+
+    def dull(self):
+        self.image.get_at()
+
+        
 
         
 
@@ -100,11 +118,11 @@ class ActionButton(Button):
         self.image.fill((255, 255, 255))
 
         # word
-        self.text = self.font.render(self.WORD, False, (0, 0, 0))
-        self.text_w = self.text.get_width()
-        self.text_h = self.text.get_height()
-        self.image.blit(
-            self.text, (50 - self.text_w / 2, 25 - self.text_h / 2))
+        # self.text = self.font.render(self.WORD, False, (0, 0, 0))
+        # self.text_w = self.text.get_width()
+        # self.text_h = self.text.get_height()
+        # self.image.blit(
+        #     self.text, (50 - self.text_w / 2, 25 - self.text_h / 2))
 
     # on click
     def update(self):
