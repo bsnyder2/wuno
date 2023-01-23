@@ -1,43 +1,44 @@
 import socket
-from _thread import *
+import _thread
 
-# HOST = "100.115.92.204"
-HOST = "10.17.3.65"
-PORT = 50012
-BACKLOG = 4 # Number of connections (players)
-sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-# # This lets us reuse the same address without having to wait
-sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) 
 
-try: 
-    sock.bind((HOST, PORT))
-    sock.listen(BACKLOG)
-    print("Waiting for connection...connected")
-except socket.error as e:
-    print(e)
-    print(f"Cannot connect to: {(HOST, PORT)}")
+class Server:
+    def __init__(self):
+        # ObieWiFi
+        self.IP = "10.17.50.224"
+        self.PORT = 50000
+        # IPv4
+        self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-def thread(connection):
-    connection.send(str.encode("Connection successful"))
-    msg = ""
-    while True:
-        try:
-            data = connection.recv(2048)
-            msg = data.decode("utf-8")
+    def start(self):
+        self.s.bind((self.IP, self.PORT))
+        # accepts maximum of 4 connections
+        self.s.listen(4)
+        print("Server started")
+
+        # loops to accept new connections
+        while True:
+            conn, addr = self.s.accept()
+            # creates thread with new connection
+            _thread.start_new_thread(self.connection, (conn, addr))
+            print(addr, "connected")
+
+    def connection(self, conn, addr):
+        conn.send(str.encode("Connected to server"))
+        while True:
+            # receive data from client
+            data = conn.recv(2048)
+            # if no data, disconnect
             if not data:
-                print("Disconnected")
-                break
-            else:
-                print(f"Received: {msg}")
-                print(f"Sending: {msg}")
-            connection.sendall(str.encode(msg))
-        except:
-            break
-    print("Connection Lost")
-    connection.shutdown(socket.SHUT_RDWR)
-    connection.close()
-        
-while True:
-    conn, addr = sock.accept()
-    print(f"Connecting to: {addr}")
-    start_new_thread(thread, (conn,))
+                print(addr, "disconnected")
+                return
+            msg = data.decode()
+            print(f"Received {msg} from {addr}")
+
+            # send received data to all clients
+            conn.sendall(str.encode(msg))
+            print(f"Sent \"{msg}\" to all clients")
+
+
+sv = Server()
+sv.start()
