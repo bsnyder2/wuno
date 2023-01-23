@@ -56,6 +56,8 @@ class Game:
             print("Word is continuable: current player takes center")
             self.center.move_all(self.current_hand)
         self.current_word = ""
+        if len(self.current_hand.cards) == 0:
+            print("player", self.current_index + 1, "has won the game!")
         self.hand_forward()
 
     def draw_n(self, hand, n):

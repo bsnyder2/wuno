@@ -68,9 +68,13 @@ class DisplayCenter:
 
 
 class GUI:
-    def __init__(self, game):
-        self.game = game
+    def __init__(self):
+        # creates a set of valid words from given file
+        file = open(sys.path[0] + "/assets/wordsets/words-58k.txt", "r")
+        valid_words = {line.strip() for line in file}
 
+        # creates game with wordset valid_words and n players
+        self.game = data.game.Game(valid_words, 4)
         # pygame setup
         self.screen = pygame.display.set_mode((500, 500))
         self.clock = pygame.time.Clock()
