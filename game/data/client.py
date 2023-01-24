@@ -11,7 +11,7 @@ class Client:
 
     def connect(self):
         self.s.connect((self.HOST_IP, self.PORT))
-        player_i = self.s.recv(2048).decode()
+        player_i = self.s.recv(2048)
         print("Connected as Player", player_i)
 
     def send(self, msg):

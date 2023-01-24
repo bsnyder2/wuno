@@ -17,18 +17,18 @@ class Server:
         print("Server started")
 
         # loops to accept new connections
-        n = 0
+        i = 0
         while True:
             conn, addr = self.s.accept()
             # creates thread with new connection
-            _thread.start_new_thread(self.connection, (conn, addr, n))
+            _thread.start_new_thread(self.connection, (conn, addr, i))
             print(addr, f"connected as Player", i)
             i += 1
             
 
     def connection(self, conn, addr, i):
         connection_i = i
-        conn.send(str.encode(connection_i))
+        conn.send(connection_i)
 
         while True:
             # receive data from client
