@@ -1,6 +1,5 @@
 import socket
 import _thread
-import data.game
 
 
 class Server:

@@ -73,9 +73,7 @@ class DisplayCenter:
 
 
 class GUI:
-    def __init__(self, client, view):
-        self.client = client
-
+    def __init__(self, view):
         # creates a set of valid words from given file
         file = open(sys.path[0] + "/assets/wordsets/words-58k.txt", "r")
         valid_words = {line.strip() for line in file}
@@ -219,32 +217,33 @@ class GUI:
             pygame.display.update()
             self.clock.tick(60)
 
-            game_info = {
-                # CardLists
-                "deck": self.game.deck.to_letters(),
-                "center": self.game.center.to_letters(),
-                "discard": self.game.discard.to_letters(),
-                "hands": [hand.to_letters() for hand in self.game.hands],
+            # send game state via json
+            # game_info = {
+            #     # CardLists
+            #     "deck": self.game.deck.to_letters(),
+            #     "center": self.game.center.to_letters(),
+            #     "discard": self.game.discard.to_letters(),
+            #     "hands": [hand.to_letters() for hand in self.game.hands],
 
-                # game status
-                "current_index": self.game.current_index,
-                "current_word": self.game.current_word,
-                "is_card_placed": self.game.is_card_placed
-            }
-            game_data = json.dumps(game_info)
-            new_info = json.loads(self.client.send(game_data))
+            #     # game status
+            #     "current_index": self.game.current_index,
+            #     "current_word": self.game.current_word,
+            #     "is_card_placed": self.game.is_card_placed
+            # }
+            # game_data = json.dumps(game_info)
+            # new_info = json.loads(self.client.send(game_data))
 
-            self.game.deck.cards = [data.cards.Card(
-                card_letter) for card_letter in new_info["deck"]]
+            # self.game.deck.cards = [data.cards.Card(
+            #     card_letter) for card_letter in new_info["deck"]]
 
-            self.game.center.cards = [data.cards.Card(
-                card_letter) for card_letter in new_info["center"]]
+            # self.game.center.cards = [data.cards.Card(
+            #     card_letter) for card_letter in new_info["center"]]
 
-            self.game.discard.cards = [data.cards.Card(
-                card_letter) for card_letter in new_info["discard"]]
+            # self.game.discard.cards = [data.cards.Card(
+            #     card_letter) for card_letter in new_info["discard"]]
 
-            for hand in self.game.hands:
-                hand.cards = []
-            for hand_i, hand in enumerate(new_info["hands"]):
-                self.game.hands[hand_i].cards = [data.cards.Card(
-                    card_letter) for card_letter in hand]
+            # for hand in self.game.hands:
+            #     hand.cards = []
+            # for hand_i, hand in enumerate(new_info["hands"]):
+            #     self.game.hands[hand_i].cards = [data.cards.Card(
+            #         card_letter) for card_letter in hand]
