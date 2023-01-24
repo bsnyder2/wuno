@@ -27,14 +27,8 @@ class Server:
             
 
     def connection(self, conn, addr, n):
+        self.n = n
         conn.send(str.encode("Connected to server"))
-        # Sending objects with pickle:
-        # pickledData = pickle.dumps(object)
-        # conn.send(pickledData)
-
-        # Receiving objects with pickle:
-        # unpickledData = pickle.loads(object)
-        # conn.recv(unpickledData)
 
         while True:
             # receive data from client
@@ -42,6 +36,7 @@ class Server:
             # if no data, disconnect
             if not data:
                 print(addr, "disconnected")
+                n -= 1
                 return
             msg = data.decode()
             print(f"Received {msg} from {addr}")

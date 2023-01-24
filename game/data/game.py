@@ -8,7 +8,6 @@ class Game:
         self.VALID_WORDS = valid_words
         self.N_PLAYERS = n_players
         self.tr = data.word_trie.WordTrie()
-        self.is_card_placed = False
         for word in self.VALID_WORDS:
             self.tr.insert(word)
 
@@ -22,6 +21,7 @@ class Game:
         self.current_index = 0
         self.current_hand = self.hands[self.current_index]
         self.current_word = ""
+        self.is_card_placed = False
 
         # initial shuffle
         self.deck.shuffle()

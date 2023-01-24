@@ -74,6 +74,10 @@ class CardList:
         target.cards.sort(key=lambda c: c.LETTER)
         self.cards.clear()
 
+    def to_letters(self):
+        return [card.LETTER for card in self.cards]
+
+
 
 class Deck(CardList):
     def __init__(self):

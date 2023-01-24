@@ -11,7 +11,7 @@ def main():
     c.connect()
 
     c.send("hello")
-    display.gui.GUI(2)
+    display.gui.GUI(c, 2)
 
 
 if __name__ == "__main__":

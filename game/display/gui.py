@@ -1,5 +1,6 @@
 import math
 import sys
+import json
 import pygame
 import data.game
 import display.sprites as sprites
@@ -71,7 +72,9 @@ class DisplayCenter:
 
 
 class GUI:
-    def __init__(self, view):
+    def __init__(self, client, view):
+        self.client = client
+
         # creates a set of valid words from given file
         file = open(sys.path[0] + "/assets/wordsets/words-58k.txt", "r")
         valid_words = {line.strip() for line in file}
@@ -214,3 +217,18 @@ class GUI:
             # update display at 60 fps
             pygame.display.update()
             self.clock.tick(60)
+
+            game_info = {
+                # CardLists
+                "deck": self.game.deck.to_letters(),
+                "center": self.game.center.to_letters(),
+                "discard": self.game.discard.to_letters(),
+                "hands": [hand.to_letters() for hand in self.game.hands],
+
+                # game status
+                "current_index": self.game.current_index,
+                "current_word": self.game.current_word,
+                "is_card_placed": self.game.is_card_placed
+            }
+            game_data = json.dumps(game_info)
+            self.client.send(game_data)
