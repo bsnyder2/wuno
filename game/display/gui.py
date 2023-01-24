@@ -157,7 +157,7 @@ class GUI:
                     sprites.Button.button_group.update()
                     sprites.Button.button_group.draw(self.screen)
 
-                # if press enter, refresh_cards
+                # if press enter, refresh cards
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN and self.game.is_card_placed:
                     self.game.hand_forward()
                     self.refresh_cards()
@@ -182,9 +182,28 @@ class GUI:
                             print("DREW CARD")
                         self.game.draw_n(self.game.current_hand, 1)
                     elif button.WORD == "COMPLETE":
-                        self.game.run_complete()
-                    elif self.game.is_card_placed == False:
-                        self.game.run_challenge()
+                        if debug:
+                            match self.game.run_complete():
+                                case 0:
+                                    print("Word is complete")
+                                case 1:
+                                    print(
+                                        "Word is complete: previous player draws 2")
+                                case 2:
+                                    print(
+                                        "Word is incomplete: current player draws 2")
+                        self.game.hand_forward()
+                    # only allow challenges if card not placed
+                    elif not self.game.is_card_placed:
+                        if debug:
+                            if self.game.run_challenge():
+                                print(
+                                    "Word is not continuable: previous player takes center")
+                            else:
+                                print(
+                                    "Word is continuable: current player takes center")
+                        self.game.hand_forward()
+
                     self.refresh_cards()
                     button.is_pressed = False
 

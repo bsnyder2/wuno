@@ -38,27 +38,32 @@ class Game:
 
     def run_complete(self):
         if len(self.current_word) > 2 and self.current_word in self.VALID_WORDS:
-            print("Word is complete: previous player draws 2")
-            self.draw_n(self.prev_hand(), 2)
             # reset center word
             self.center.move_all(self.discard)
             self.current_word = ""
+            if not self.is_card_placed:
+                self.draw_n(self.prev_hand(), 2)
+                # called previous player successfully
+                return 1
+            # completed word on own turn
+            return 0
         else:
-            print("Word is incomplete: current player draws 2")
+            # called previous player unsuccessfully
             self.draw_n(self.current_hand, 2)
-        self.hand_forward()
+            return 2
 
     def run_challenge(self):
         if len(self.tr.continuant_letters(self.current_word)) < 1:
-            print("Word is not continuable: previous player takes center")
             self.center.move_all(self.prev_hand())
+            self.current_word = ""
+            return True
         else:
-            print("Word is continuable: current player takes center")
+            if len(self.current_hand.cards) < 1:
+                print("Player", self.current_index + 1, "has won the game!")
+                exit(0)
             self.center.move_all(self.current_hand)
-        self.current_word = ""
-        if len(self.current_hand.cards) == 0:
-            print("player", self.current_index + 1, "has won the game!")
-        self.hand_forward()
+            self.current_word = ""
+            return False
 
     def draw_n(self, hand, n):
         for i in range(n):
