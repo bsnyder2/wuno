@@ -28,7 +28,7 @@ class Server:
 
     def connection(self, conn, addr, i):
         connection_i = i
-        conn.send(connection_i)
+        conn.send(str.encode(str(connection_i)))
 
         while True:
             # receive data from client
