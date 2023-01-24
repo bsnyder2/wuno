@@ -22,13 +22,13 @@ class Server:
             conn, addr = self.s.accept()
             # creates thread with new connection
             _thread.start_new_thread(self.connection, (conn, addr, n))
-            print(addr, f"connected (Player {n})")
-            n += 1
+            print(addr, f"connected as Player", i)
+            i += 1
             
 
-    def connection(self, conn, addr, n):
-        self.n = n
-        conn.send(str.encode("Connected to server"))
+    def connection(self, conn, addr, i):
+        connection_i = i
+        conn.send(str.encode(connection_i))
 
         while True:
             # receive data from client
@@ -36,7 +36,7 @@ class Server:
             # if no data, disconnect
             if not data:
                 print(addr, "disconnected")
-                n -= 1
+                i -= 1
                 return
             msg = data.decode()
             print(f"Received {msg} from {addr}")

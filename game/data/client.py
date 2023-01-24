@@ -1,5 +1,5 @@
 import socket
-
+import display.gui
 
 class Client:
     def __init__(self, host_ip, port):
@@ -11,8 +11,8 @@ class Client:
 
     def connect(self):
         self.s.connect((self.HOST_IP, self.PORT))
-        connect_msg = self.s.recv(2048).decode()
-        print(connect_msg)
+        player_i = self.s.recv(2048).decode()
+        print("Connected as Player", player_i)
 
     def send(self, msg):
         # send data to server
