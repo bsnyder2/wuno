@@ -86,7 +86,7 @@ class GUI:
         # initialize cursor and buttons
         sprites.Cursor()
         sprites.ActionButton("COMPLETE", 310, 280)
-        sprites.ActionButton("CHALLENGE", 310, 340)
+        self.challenge = sprites.ActionButton("CHALLENGE", 310, 340)
         sprites.DeckButton(190, 310)
 
         self.display_hands = []
@@ -162,6 +162,9 @@ class GUI:
                     self.game.hand_forward()
                     self.refresh_cards()
                     self.game.is_card_placed = False
+                    
+            if self.game.is_card_placed:
+                self.challenge.is_active = False
 
             # for all buttons:
             for button in sprites.Button.button_group:
@@ -194,6 +197,7 @@ class GUI:
                                         "Word is incomplete: current player draws 2")
                         self.game.hand_forward()
                     # only allow challenges if card not placed
+                        
                     elif not self.game.is_card_placed:
                         if debug:
                             if self.game.run_challenge():
