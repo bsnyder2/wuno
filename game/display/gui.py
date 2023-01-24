@@ -109,7 +109,6 @@ class GUI:
                 self.game.hands[3], 3, view))
 
         self.display_center = DisplayCenter(self.game.center)
-        # print(self.display_center.center.cards[0])
 
         # display all buttons
         self.refresh_cards()
@@ -162,9 +161,12 @@ class GUI:
                     self.game.hand_forward()
                     self.refresh_cards()
                     self.game.is_card_placed = False
-                    
+
+            # if card placed, deactivate challenge button
             if self.game.is_card_placed:
                 self.challenge.is_active = False
+            else:
+                self.challenge.is_active = True
 
             # for all buttons:
             for button in sprites.Button.button_group:
@@ -196,9 +198,7 @@ class GUI:
                                     print(
                                         "Word is incomplete: current player draws 2")
                         self.game.hand_forward()
-                    # only allow challenges if card not placed
-                        
-                    elif not self.game.is_card_placed:
+                    else:
                         if debug:
                             if self.game.run_challenge():
                                 print(
