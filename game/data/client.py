@@ -13,12 +13,14 @@ class Client:
         self.s.connect((self.HOST_IP, self.PORT))
         player_i = int(self.s.recv(2048).decode())
         print("Connected as Player", player_i)
+        display.gui.GUI(self, player_i)
 
     def send(self, msg):
         # send data to server
-        self.s.send(str.encode(msg))
+        self.s.sendall(str.encode(msg))
         print(f"Sent \"{msg}\"")
 
         # receive data from server
         msg = self.s.recv(2048).decode()
         print(f"Received \"{msg}\"")
+        return msg

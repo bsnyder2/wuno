@@ -1,6 +1,7 @@
 import socket
 import _thread
-# import pickle
+import data.game
+
 
 class Server:
     def __init__(self, host_ip, port):
@@ -16,19 +17,22 @@ class Server:
         self.s.listen(4)
         print("Server started")
 
-        # loops to accept new connections
-        i = 0
-        while True:
-            conn, addr = self.s.accept()
-            # creates thread with new connection
-            _thread.start_new_thread(self.connection, (conn, addr, i))
-            print(addr, f"connected as Player", i)
-            i += 1
-            
+        # loops to accept new connections, start on interrupt
+        print("Accepting connections ... (Ctrl-C to start game)")
+        self.i = 0
+        try:
+            while True:
+                conn, addr = self.s.accept()
+                # creates thread with new connection
+                _thread.start_new_thread(self.connection, (conn, addr))
+                print(addr, f"connected as Player", self.i)
+        except KeyboardInterrupt:
+            pass
 
-    def connection(self, conn, addr, i):
-        connection_i = i
+    def connection(self, conn, addr):
+        connection_i = self.i
         conn.send(str.encode(str(connection_i)))
+        self.i += 1
 
         while True:
             # receive data from client
@@ -36,11 +40,11 @@ class Server:
             # if no data, disconnect
             if not data:
                 print(addr, "disconnected")
-                i -= 1
+                self.i -= 1
                 return
             msg = data.decode()
             print(f"Received {msg} from {addr}")
 
-            # send received data to all clients
+            # send received data to client
             conn.sendall(str.encode(msg))
             print(f"Sent \"{msg}\" to all clients")

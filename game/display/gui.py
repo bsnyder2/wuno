@@ -2,6 +2,7 @@ import math
 import sys
 import json
 import pygame
+import data.cards
 import data.game
 import display.sprites as sprites
 
@@ -231,4 +232,19 @@ class GUI:
                 "is_card_placed": self.game.is_card_placed
             }
             game_data = json.dumps(game_info)
-            self.client.send(game_data)
+            new_info = json.loads(self.client.send(game_data))
+
+            self.game.deck.cards = [data.cards.Card(
+                card_letter) for card_letter in new_info["deck"]]
+
+            self.game.center.cards = [data.cards.Card(
+                card_letter) for card_letter in new_info["center"]]
+
+            self.game.discard.cards = [data.cards.Card(
+                card_letter) for card_letter in new_info["discard"]]
+
+            for hand in self.game.hands:
+                hand.cards = []
+            for hand_i, hand in enumerate(new_info["hands"]):
+                self.game.hands[hand_i].cards = [data.cards.Card(
+                    card_letter) for card_letter in hand]
