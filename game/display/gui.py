@@ -20,7 +20,6 @@ class DisplayHand:
             (2 * position * math.pi / 4)
         self.hand_center = self.polar_to_cart((200, self.theta))
 
-
     def assign_buttons(self, is_current):
         for card_i, card in enumerate(self.hand.cards):
             # initialize CardButton with default center (since rect needs to be reset)
@@ -60,9 +59,12 @@ class DisplayCenter:
 
     def assign_buttons(self):
         for card_i, card in enumerate(self.center.cards):
+            # compress cards if too many
             inter_dist = 60
-            offset = (len(self.center.cards) - 1) * inter_dist / 2
+            if len(self.center.cards) > 5:
+                inter_dist = 240 / (len(self.center.cards) - 1)
 
+            offset = (len(self.center.cards) - 1) * inter_dist / 2
             card.card_button = sprites.CardButton(
                 card, False, 250 + card_i * inter_dist - offset, 190)
             card.card_button.is_active = False
@@ -155,21 +157,23 @@ class GUI:
                     sprites.Button.button_group.update()
                     sprites.Button.button_group.draw(self.screen)
 
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_RETURN:
-                        if self.game.card_placed == True:
-                            self.game.hand_forward()
-                            self.refresh_cards()
-                            self.game.card_placed = False
+                # if press enter, refresh_cards
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN and self.game.is_card_placed:
+                    self.game.hand_forward()
+                    self.refresh_cards()
+                    self.game.is_card_placed = False
 
             # for all buttons:
             for button in sprites.Button.button_group:
                 # if confirmed card, place and refresh
-                if button.is_confirmed and self.game.card_placed == False:
+                if button.is_confirmed and not self.game.is_card_placed:
                     if debug:
                         print("CONFIRMED", button.card)
                     self.game.place(button.card)
                     self.refresh_cards()
+                    # deactivate all cards until next turn
+                    for card_button in sprites.CardButton.card_group:
+                        card_button.is_active = False
                     button.is_confirmed = False
                 # if pressed action button, do corresponding action and refresh
                 elif button.is_pressed:
@@ -179,7 +183,7 @@ class GUI:
                         self.game.draw_n(self.game.current_hand, 1)
                     elif button.WORD == "COMPLETE":
                         self.game.run_complete()
-                    elif self.game.card_placed == False:
+                    elif self.game.is_card_placed == False:
                         self.game.run_challenge()
                     self.refresh_cards()
                     button.is_pressed = False
