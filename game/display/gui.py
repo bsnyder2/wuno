@@ -13,16 +13,20 @@ debug = True
 
 
 class DisplayHand:
-    def __init__(self, hand, position, view):
+    def __init__(self, hand, position):
         self.hand = hand
         self.position = position
-        self.view = view
+        self.view = 0
 
         self.theta = ((self.view + 1) * math.pi / 2) + \
             (2 * position * math.pi / 4)
         self.hand_center = self.polar_to_cart((200, self.theta))
 
     def assign_buttons(self, is_current):
+        self.theta = ((self.view + 1) * math.pi / 2) + \
+            (2 * self.position * math.pi / 4)
+        self.hand_center = self.polar_to_cart((200, self.theta))
+
         for card_i, card in enumerate(self.hand.cards):
             # initialize CardButton with default center (since rect needs to be reset)
             # hidden if not current hand
@@ -78,8 +82,9 @@ class GUI:
         file = open(sys.path[0] + "/assets/wordsets/words-58k.txt", "r")
         valid_words = {line.strip() for line in file}
 
-        # creates game with wordset valid_words and n players
+        # creates game with wordset valid_words and 4 players
         self.game = data.game.Game(valid_words, 4)
+        self.view = view
 
         # pygame setup
         self.screen = pygame.display.set_mode((500, 500))
@@ -95,20 +100,20 @@ class GUI:
         # 2 players: across
         if self.game.N_PLAYERS == 2:
             self.display_hands.append(DisplayHand(
-                self.game.hands[0], 0, view))
+                self.game.hands[0], 0))
             self.display_hands.append(DisplayHand(
-                self.game.hands[1], 2, view))
+                self.game.hands[1], 2))
         # 3 or 4 players: all spots
         elif self.game.N_PLAYERS >= 3:
             self.display_hands.append(DisplayHand(
-                self.game.hands[0], 0, view))
+                self.game.hands[0], 0))
             self.display_hands.append(DisplayHand(
-                self.game.hands[1], 1, view))
+                self.game.hands[1], 1))
             self.display_hands.append(DisplayHand(
-                self.game.hands[2], 2, view))
+                self.game.hands[2], 2))
         if self.game.N_PLAYERS == 4:
             self.display_hands.append(DisplayHand(
-                self.game.hands[3], 3, view))
+                self.game.hands[3], 3))
 
         self.display_center = DisplayCenter(self.game.center)
 
@@ -125,7 +130,9 @@ class GUI:
         self.screen.fill((0, 0, 0))
 
         # assign buttons to cards in current hand
+
         for display_hand in self.display_hands:
+            display_hand.view = self.view
             is_current = display_hand.hand == self.game.current_hand
             display_hand.assign_buttons(is_current)
         self.display_center.assign_buttons()
@@ -161,6 +168,7 @@ class GUI:
                 # if press enter, refresh cards
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN and self.game.is_card_placed:
                     self.game.hand_forward()
+                    self.view -= 1
                     self.refresh_cards()
                     self.game.is_card_placed = False
 
@@ -200,6 +208,7 @@ class GUI:
                                     print(
                                         "Word is incomplete: current player draws 2")
                         self.game.hand_forward()
+                        self.view -= 1
                     else:
                         if debug:
                             if self.game.run_challenge():
@@ -209,7 +218,8 @@ class GUI:
                                 print(
                                     "Word is continuable: current player takes center")
                         self.game.hand_forward()
-
+                        self.view -= 1
+                    
                     self.refresh_cards()
                     button.is_pressed = False
 
