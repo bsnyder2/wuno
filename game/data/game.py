@@ -24,12 +24,14 @@ class Game:
         self.is_card_placed = False
         self.is_won = False
 
+        self.completed_words = []
+
         # initial shuffle
         self.deck.shuffle()
 
         # deal cards
         for i in range(n_players):
-            self.draw_n(self.current_hand, 5)
+            self.draw_n(self.current_hand, 3)
             self.hand_forward()
 
     def place(self, pl_card):
@@ -43,6 +45,7 @@ class Game:
         if len(self.current_word) > 2 and self.current_word in self.VALID_WORDS:
             # reset center word
             self.center.move_all(self.discard)
+            self.completed_words.append(self.current_word)
             self.current_word = ""
             if not self.is_card_placed:
                 self.draw_n(self.prev_hand(), 2)
@@ -61,9 +64,6 @@ class Game:
             self.current_word = ""
             return True
         else:
-            if len(self.current_hand.cards) < 1:
-                print("Player", self.current_index + 1, "has won the game!")
-                exit(0)
             self.center.move_all(self.current_hand)
             self.current_word = ""
             return False

@@ -89,7 +89,7 @@ class GUI:
         self.screen = pygame.display.set_mode((500, 500))
         self.clock = pygame.time.Clock()
 
-        self.display_msg("WUNO")
+        self.display_msg("WUNO", 250)
 
         # initialize cursor and buttons
         sprites.Cursor()
@@ -131,7 +131,8 @@ class GUI:
         self.screen.fill((0, 0, 0))
 
         # assign buttons to cards in current hand
-        COLORS = [(240, 160, 160), (240, 240, 160), (160, 160, 240), (160, 240, 160)]
+        COLORS = [(240, 160, 160), (240, 240, 160),
+                  (160, 160, 240), (160, 240, 160)]
 
         for hand_i, display_hand in enumerate(self.display_hands):
             display_hand.view = self.view
@@ -151,7 +152,7 @@ class GUI:
             print("Current hand:", self.game.current_hand)
             print(f"Discard pile: {self.game.discard}\n")
 
-    def display_msg(self, msg):
+    def display_msg(self, msg, y):
         font = pygame.font.Font(
             sys.path[0] + "/assets/fonts/LEMONMILK-Bold.otf", 30)
         sound = pygame.mixer.Sound(
@@ -161,8 +162,10 @@ class GUI:
         text_w, text_h = text.get_width(), text.get_height()
         rect_w, rect_h = text_w + 30, text_h + 30
 
-        pygame.draw.rect(self.screen, (255, 255, 255), (250 - rect_w / 2, 250 - rect_h / 2, rect_w, rect_h))
-        pygame.draw.rect(self.screen, (255, 255, 255), (250 - rect_w / 2, 250 - rect_h / 2, rect_w, rect_h), 2)
+        pygame.draw.rect(self.screen, (255, 255, 255),
+                         (250 - rect_w / 2, y - rect_h / 2, rect_w, rect_h))
+        pygame.draw.rect(self.screen, (255, 255, 255),
+                         (250 - rect_w / 2, y - rect_h / 2, rect_w, rect_h), 2)
         self.screen.blit(
             text, (250 - text_w / 2, 250 - text_h / 2))
         pygame.display.update()
@@ -186,8 +189,8 @@ class GUI:
                     sprites.Button.button_group.update()
                     sprites.Button.button_group.draw(self.screen)
 
-                # if press enter, refresh cards
-                if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN and self.game.is_card_placed:
+                # if pressed space or enter, refresh cards
+                if event.type == pygame.KEYDOWN and (event.key == pygame.K_SPACE or event.key == pygame.K_RETURN) and self.game.is_card_placed:
                     self.game.hand_forward()
                     self.view -= 1
                     self.refresh_cards()
@@ -195,7 +198,9 @@ class GUI:
 
             # if won, print win screen
             if self.game.is_won:
-                self.display_msg("YOU WIN")
+                self.display_msg("YOU WIN", 250)
+
+                print(self.game.completed_words)
                 sys.exit(0)
 
             # if word less than 3 letters, deactivate complete button
