@@ -7,7 +7,7 @@ import display.sprites as sprites
 pygame.init()
 
 # prints equivalent text info to gui
-debug = True
+debug = False
 
 
 class DisplayHand:
@@ -78,7 +78,7 @@ class DisplayCenter:
 class GUI:
     def __init__(self, view):
         # creates a set of valid words from given file
-        file = open(sys.path[0] + "/assets/wordsets/words-370k.txt", "r")
+        file = open(sys.path[0] + "/assets/wordsets/words-58k.txt", "r")
         valid_words = {line.strip() for line in file}
 
         # creates game with wordset valid_words and 4 players
@@ -229,8 +229,9 @@ class GUI:
                             print("DREW CARD")
                         self.game.draw_n(self.game.current_hand, 1)
                     elif button.WORD == "COMPLETE":
+                        result = self.game.run_complete()
                         if debug:
-                            match self.game.run_complete():
+                            match result:
                                 case 0:
                                     print("Word is complete")
                                 case 1:
@@ -242,8 +243,9 @@ class GUI:
                         self.game.hand_forward()
                         self.view -= 1
                     else:
+                        result = self.game.run_challenge()
                         if debug:
-                            if self.game.run_challenge():
+                            if result:
                                 print(
                                     "Word is not continuable: previous player takes center")
                             else:
