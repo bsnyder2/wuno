@@ -89,7 +89,7 @@ class GUI:
         self.screen = pygame.display.set_mode((500, 500))
         self.clock = pygame.time.Clock()
 
-        self.display_msg("WUNO", 250)
+        self.display_msg("WUNO")
 
         # initialize cursor and buttons
         sprites.Cursor()
@@ -152,7 +152,7 @@ class GUI:
             print("Current hand:", self.game.current_hand)
             print(f"Discard pile: {self.game.discard}\n")
 
-    def display_msg(self, msg, y):
+    def display_msg(self, msg):
         font = pygame.font.Font(
             sys.path[0] + "/assets/fonts/LEMONMILK-Bold.otf", 30)
         sound = pygame.mixer.Sound(
@@ -163,11 +163,11 @@ class GUI:
         rect_w, rect_h = text_w + 30, text_h + 30
 
         pygame.draw.rect(self.screen, (255, 255, 255),
-                         (250 - rect_w / 2, y - rect_h / 2, rect_w, rect_h))
+                         (250 - rect_w / 2, 250 - rect_h / 2, rect_w, rect_h))
         pygame.draw.rect(self.screen, (255, 255, 255),
-                         (250 - rect_w / 2, y - rect_h / 2, rect_w, rect_h), 2)
-        self.screen.blit(
-            text, (250 - text_w / 2, 250 - text_h / 2))
+                         (250 - rect_w / 2, 250 - rect_h / 2, rect_w, rect_h), 2)
+        self.screen.blit(text, (250 - text_w / 2, 250 - text_h / 2))
+
         pygame.display.update()
         pygame.time.wait(500)
         sound.play()
@@ -198,9 +198,14 @@ class GUI:
 
             # if won, print win screen
             if self.game.is_won:
-                self.display_msg("YOU WIN", 250)
+                self.display_msg("YOU WIN")
 
-                print(self.game.completed_words)
+                # print completed words
+                print("Completed words:")
+                for completed_word in self.game.completed_words[:-1]:
+                    print(completed_word, end=", ")
+                print(self.game.completed_words[-1])
+
                 sys.exit(0)
 
             # if word less than 3 letters, deactivate complete button
