@@ -22,6 +22,7 @@ class Game:
         self.current_hand = self.hands[self.current_index]
         self.current_word = ""
         self.is_card_placed = False
+        self.is_won = False
 
         # initial shuffle
         self.deck.shuffle()
@@ -35,6 +36,8 @@ class Game:
         self.current_hand.place(self.center, pl_card)
         self.current_word += pl_card.LETTER
         self.is_card_placed = True
+        if len(self.current_hand.cards) < 1:
+            self.is_won = True
 
     def run_complete(self):
         if len(self.current_word) > 2 and self.current_word in self.VALID_WORDS:

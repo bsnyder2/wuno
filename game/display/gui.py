@@ -1,15 +1,13 @@
 import math
 import sys
-import json
 import pygame
-import data.cards
 import data.game
 import display.sprites as sprites
 
 pygame.init()
 
 # prints equivalent text info to gui
-debug = True
+debug = False
 
 
 class DisplayHand:
@@ -22,7 +20,7 @@ class DisplayHand:
             (2 * position * math.pi / 4)
         self.hand_center = self.polar_to_cart((200, self.theta))
 
-    def assign_buttons(self, is_current):
+    def assign_buttons(self, color, is_current):
         self.theta = ((self.view + 1) * math.pi / 2) + \
             (2 * self.position * math.pi / 4)
         self.hand_center = self.polar_to_cart((200, self.theta))
@@ -30,7 +28,8 @@ class DisplayHand:
         for card_i, card in enumerate(self.hand.cards):
             # initialize CardButton with default center (since rect needs to be reset)
             # hidden if not current hand
-            card.card_button = sprites.CardButton(card, not is_current)
+            card.card_button = sprites.CardButton(
+                card, color, not is_current)
             # rotate image
             card.card_button.image = pygame.transform.rotate(
                 card.card_button.image, 90 - 180 * self.theta / math.pi)
@@ -72,14 +71,14 @@ class DisplayCenter:
 
             offset = (len(self.center.cards) - 1) * inter_dist / 2
             card.card_button = sprites.CardButton(
-                card, False, 250 + card_i * inter_dist - offset, 190)
+                card, (200, 200, 200), False, 250 + card_i * inter_dist - offset, 190)
             card.card_button.is_active = False
 
 
 class GUI:
     def __init__(self, view):
         # creates a set of valid words from given file
-        file = open(sys.path[0] + "/assets/wordsets/words-58k.txt", "r")
+        file = open(sys.path[0] + "/assets/wordsets/words-370k.txt", "r")
         valid_words = {line.strip() for line in file}
 
         # creates game with wordset valid_words and 4 players
@@ -89,6 +88,8 @@ class GUI:
         # pygame setup
         self.screen = pygame.display.set_mode((500, 500))
         self.clock = pygame.time.Clock()
+
+        self.display_msg("WUNO")
 
         # initialize cursor and buttons
         sprites.Cursor()
@@ -130,11 +131,12 @@ class GUI:
         self.screen.fill((0, 0, 0))
 
         # assign buttons to cards in current hand
+        COLORS = [(240, 160, 160), (240, 240, 160), (160, 160, 240), (160, 240, 160)]
 
-        for display_hand in self.display_hands:
+        for hand_i, display_hand in enumerate(self.display_hands):
             display_hand.view = self.view
             is_current = display_hand.hand == self.game.current_hand
-            display_hand.assign_buttons(is_current)
+            display_hand.assign_buttons(COLORS[hand_i], is_current)
         self.display_center.assign_buttons()
 
         # redraw buttons
@@ -148,6 +150,25 @@ class GUI:
             print("Center:", self.game.center)
             print("Current hand:", self.game.current_hand)
             print(f"Discard pile: {self.game.discard}\n")
+
+    def display_msg(self, msg):
+        font = pygame.font.Font(
+            sys.path[0] + "/assets/fonts/LEMONMILK-Bold.otf", 30)
+        sound = pygame.mixer.Sound(
+            sys.path[0] + "/assets/sounds/start-win.wav")
+
+        text = font.render(msg, True, (0, 0, 0))
+        text_w, text_h = text.get_width(), text.get_height()
+        rect_w, rect_h = text_w + 30, text_h + 30
+
+        pygame.draw.rect(self.screen, (255, 255, 255), (250 - rect_w / 2, 250 - rect_h / 2, rect_w, rect_h))
+        pygame.draw.rect(self.screen, (255, 255, 255), (250 - rect_w / 2, 250 - rect_h / 2, rect_w, rect_h), 2)
+        self.screen.blit(
+            text, (250 - text_w / 2, 250 - text_h / 2))
+        pygame.display.update()
+        pygame.time.wait(500)
+        sound.play()
+        pygame.time.wait(2500)
 
     def game_loop(self):
         while True:
@@ -171,6 +192,11 @@ class GUI:
                     self.view -= 1
                     self.refresh_cards()
                     self.game.is_card_placed = False
+
+            # if won, print win screen
+            if self.game.is_won:
+                self.display_msg("YOU WIN")
+                sys.exit(0)
 
             # if card placed, deactivate challenge button
             if self.game.is_card_placed:
@@ -219,7 +245,7 @@ class GUI:
                                     "Word is continuable: current player takes center")
                         self.game.hand_forward()
                         self.view -= 1
-                    
+
                     self.refresh_cards()
                     button.is_pressed = False
 

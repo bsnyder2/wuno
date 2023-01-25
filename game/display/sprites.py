@@ -53,15 +53,17 @@ class Button(pygame.sprite.Sprite, abc.ABC):
 class CardButton(Button):
     card_group = pygame.sprite.Group()
 
-    def __init__(self, card, is_hidden, pos_x=0, pos_y=0):
+    def __init__(self, card, color, is_hidden, pos_x=0, pos_y=0):
         super().__init__(50, 70, pos_x, pos_y)
         CardButton.card_group.add(self)
 
         self.card = card
+        self.color = color
+        self.selected_color = tuple(val - 50 for val in self.color)
         self.is_hidden = is_hidden
 
         # image
-        self.image.fill((160, 200, 240))
+        self.image.fill(self.color)
         pygame.draw.rect(self.image, (0, 0, 0), (0, 0, 50, 70), 2)
 
         font = pygame.font.Font(
@@ -85,14 +87,15 @@ class CardButton(Button):
             else:
                 # deselect all other cards
                 for card_button in CardButton.card_group:
-                    if not card_button.is_hidden:
-                        card_button.image.fill((160, 200, 240))
-                        pygame.draw.rect(card_button.image, (0, 0, 0), (0, 0, 50, 70), 2)
+                    if not card_button.is_hidden and not card_button.color == (200, 200, 200):
+                        card_button.image.fill(self.color)
+                        pygame.draw.rect(card_button.image,
+                                         (0, 0, 0), (0, 0, 50, 70), 2)
                         card_button.image.blit(
                             card_button.text, (25 - card_button.text_w / 2, 35 - card_button.text_h / 2))
                         card_button.is_selected = False
                 # select current card
-                self.image.fill((110, 150, 190))
+                self.image.fill(self.selected_color)
                 pygame.draw.rect(self.image, (0, 0, 0), (0, 0, 50, 70), 2)
                 self.image.blit(
                     self.text, (25 - self.text_w / 2, 35 - self.text_h / 2))
@@ -127,7 +130,7 @@ class DeckButton(Button):
         super().__init__(50, 70, pos_x, pos_y)
 
         # image
-        self.image.fill((160, 200, 240))
+        self.image.fill((200, 200, 200))
 
     def update(self):
         if pygame.sprite.collide_rect(Cursor.cursor_group.sprite, self) and self.is_active:
