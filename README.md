@@ -1,15 +1,20 @@
-# Cool Word Game (title TBD)
+# WUNO (Like Uno with Words)
+A game by Ben Snyder, Daniel Cruz, Theo McGlashan, and Susanne Goldstein
 
-Group Members: Ben Snyder, Daniel Cruz, Theo McGlashan, Susanne Goldstein
+## Description and Rules
+An Uno-like word game using letters instead of numbers, also taking inspiration from the word game Ghost. Four players take turns placing letter cards in the center, building a word by adding letters onto the end. A player wins when they have no cards remaining.
 
- <!-- Project idea: word game! Possibly like 2048 but with words. Could do a speed typing/rhythm game. Could do something like uno but you make words. -->
+A player may draw a card from the deck at any point, giving them more options to continue the current word.
 
-Current idea: An Uno-like word game using words instead of numbers, also taking inspiration from the word game Ghost. Players take turns placing down letters to form words and are rewarded or penalized for completing those words. We will solidify the details of gameplay once we have a working prototype so we can make sure it's fun. Once we have a basic structure we might add some other elements to make the game more complex. The GUI will be made in Pygame.
+When a player places a card they believe completes the word, they may state it is complete. If they are correct, the word is reset; if not, addition to the word continues and the player draws two cards from the deck.
 
-Schedule:
-  1/13:
-    Have some sort of game that runs, only on one computer not yet multiplayer. Simple display stuff with pygame, not final look of the game.
-  1/20:
-    Make it look prettier, change the game as needed so it's actually fun. Attempt to put it on a server so we can play against each other.
-  1/25
-    Finish making it multiplayer, fix bugs.
+If a player believes the card placed by the previous player completes the word, they may state it is complete before placing a card. If they are correct, the word is reset and the previous player draws two cards; if not, addition to the word continues and the current player draws two cards.
+
+If a player believes the current word cannot be added to to form a valid word, they may raise a challenge before placing a card. If they are correct, the word is reset and the previous player draws all cards from the center; if not, addition to the word continues and the current player draws all cards from the center.
+
+The distribution of cards in the deck is exactly the same as that of Scrabble tiles.
+
+## Notes
+This package's code contains remnants of attempts to allow for local multiplayer using socket and json. We got to the point where game data was successfully being transmitted between devices, but due to time constraints we weren't able to figure out how to use this data to sync game states.
+
+The game is also currently only functional for four players; however, with some minor changes it could be played with two or three.
