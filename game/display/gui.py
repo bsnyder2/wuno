@@ -7,7 +7,7 @@ import display.sprites as sprites
 pygame.init()
 
 # prints equivalent text info to gui
-debug = False
+debug = True
 
 
 class DisplayHand:
@@ -93,7 +93,7 @@ class GUI:
 
         # initialize cursor and buttons
         sprites.Cursor()
-        sprites.ActionButton("COMPLETE", 310, 280)
+        self.complete = sprites.ActionButton("COMPLETE", 310, 280)
         self.challenge = sprites.ActionButton("CHALLENGE", 310, 340)
         sprites.DeckButton(190, 310)
 
@@ -197,6 +197,12 @@ class GUI:
             if self.game.is_won:
                 self.display_msg("YOU WIN")
                 sys.exit(0)
+
+            # if word less than 3 letters, deactivate complete button
+            if len(self.game.current_word) < 3:
+                self.complete.is_active = False
+            else:
+                self.complete.is_active = True
 
             # if card placed, deactivate challenge button
             if self.game.is_card_placed:
